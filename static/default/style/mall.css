@@ -1,0 +1,129 @@
+
+/*我要充值*/
+.third_list{}
+.third_list label{ width:120px; float:left; border:1px solid #ccc; margin:4px;_margin:2px;}
+.third_list label:hover{ border:1px solid #F30;}
+.third_list label input{ position:relative; top:-10px;}
+.iconthird{ width:120px; height:30px; display:inline-block; cursor:pointer;}
+.alipay{ background:url(../images/zfb.gif) no-repeat #fff;}
+.unionpay{ background:url(../images/yinlian.gif) no-repeat #fff;}
+
+
+.bank_list{}
+.bank_list label{ width:190px; float:left; border:1px solid #ccc; margin:4px;_margin:2px;}
+.bank_list label:hover{ border:1px solid #F30;}
+.bank_list label input{ position:relative; top:-10px;}
+.iconbank{ width:120px; height:37px; display:inline-block; background-image:url(images/combo.png);}
+.ABC {
+    background-position: 0 0;
+}
+.BJBANK {
+    background-position: 0 -36px;
+}
+.BJRCB {
+    background-position: 0 -72px;
+}
+.BOC {
+    background-position: 0 -108px;
+}
+.CCB {
+    background-position: 0 -144px;
+}
+.CDCB {
+    background-position: 0 -180px;
+}
+.CEB {
+    background-position: 0 -216px;
+}
+.CIB {
+    background-position: 0 -252px;
+}
+.CITIC {
+    background-position: 0 -288px;
+}
+.CMB {
+    background-position: 0 -324px;
+}
+.CMBC {
+    background-position: 0 -360px;
+}
+.COMM {
+    background-position: 0 -396px;
+}
+.FDB {
+    background-position: 0 -432px;
+}
+.GDB {
+    background-position: 0 -468px;
+}
+.HZCB {
+    background-position: 0 -504px;
+}
+.ICBC {
+    background-position: 0 -540px;
+}
+.NBBANK {
+    background-position: 0 -576px;
+}
+.PSBC {
+    background-position: 0 -612px;
+}
+.SDB {
+    background-position: 0 -648px;
+}
+.SHBANK {
+    background-position: 0 -684px;
+}
+.SHRCB {
+    background-position: 0 -720px;
+}
+.SPABANK {
+    background-position: 0 -756px;
+}
+.SPDB {
+    background-position: 0 -792px;
+}
+.WZCB {
+    background-position: 0 -828px;
+}
+
+.btn02{display:inline-block;padding:0px 15px;border:1px solid #fff;background:#f3f3f3;height:32px;line-height:32px;outline:1px solid #ccc;}
+.btn02:hover{background:#eee;outline:1px solid #999;}
+
+.btnB{border:1px solid #ff4a00;color:#fff;cursor:pointer;display:inline-block;font-size:14px;height:38px;line-height:38px;margin-bottom:0;
+    padding:0;text-align:center;width:148px;font-weight:400;font-family:"microsoft yahei";background:#ff4a00;}
+.btnC{border:1px solid #ccc;color:#000;cursor:pointer;display:inline-block;font-size:14px;height:38px;line-height:38px;margin-bottom:0;
+    padding:0;text-align:center;width:148px;font-weight:400;font-family:"microsoft yahei";background:#eee;}
+.cartdelbtn{display:inline-block;background:#eb6f24;color:#fff;padding:2px 10px;border-radius:2px;}
+.cartdelbtn:hover{color:#fff;}
+
+
+
+.btn09{ background:url(../images/bg_icon9.gif) no-repeat; width:150px; height:30px; line-height:30px; display:inline-block; color:#000; font-size:14px; font-family:'微软雅黑'; text-align:center; text-decoration:none;}
+
+.pay_complete_box  p{ padding:10px; line-height:24px; font-size:14px; text-indent:15px;}
+.pay_complete_box .bt002ss_box{ margin:100px 10px 0px 10px; text-align:center;}
+.pay_complete_box .bt002ss_box a{ font-size:14px;}
+
+.btn_hdfk{font-size:12px;border:none;background:none;color:#12549e;font-weight:bold;}
+
+
+/*付款回调页面*/
+.pay_back_box{line-height:26px;font-size:24px;color:#000;text-align:center;}
+.pay_back_box .pay_ok_ico{display:inline-block;background:url(../images/succeed.png) no-repeat;width:48px;height:48px;}
+.pay_back_box .pay_ng_ico{display:inline-block;background:url(../images/error.png) no-repeat;width:48px;height:48px;}
+.pay_back_box .pay_warm_ico{display:inline-block;background:url(../images/warning.png) no-repeat;width:48px;height:48px;}
+
+
+/*订单列表的 样式*/
+.order_speed_btn{display:inline-block;height:20px;line-height:20px;color:#fff;background:#f40;width:60px;border-radius:2px;}
+.order_speed_btn:hover{color:#fff;}
+.order_speed_btn_detail{background:#eee;color:#000;}
+.order_speed_btn_del{background:#eee;color:#000;}
+
+.order_speed_ico{display:inline-block;height:20px;width:20px;line-height:20px;margin-right:5px;position:relative;top:3px;}
+.order_speed_ico_ok{background:url(../images/order_speed_ico_ok.png?2) no-repeat;}
+.order_speed_ico_error{background:url(../images/order_speed_ico_error.png) no-repeat;}
+.order_speed_ico_now{background:url(../images/order_speed_ico_now.png) no-repeat;}
+.order_speed_ico_wait{background:url(../images/order_speed_ico_wait.png) no-repeat;}
+

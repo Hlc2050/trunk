@@ -1,0 +1,28 @@
+body{ background-color:#145a12;font-family: "微软雅黑";
+font-size: 14px;
+line-height: 24px; }
+p{ width:320px;}
+.header{ background-color:#fa113d; font-size:16px; line-height:28px; color:#FF0; text-align:center}
+.header a{color:#FF0}
+.w-data{ width:320px; margin:0 auto;background-color:#efffda;}
+.dinggou_cl{background-color:#FFF; padding:5px}
+.img_1,.img{line-height:0; text-align:center; overflow:hidden}
+.img_1{ margin-top:10px}
+.g1{background-image: url(../../images/ablym_1.2/g1.png);background-repeat: repeat-x;height:5px; width:100%}
+.g2{text-align:center; background-color:#FFF; line-height:25px}
+.g3{ line-height:33px; font-size:26px; font-weight:bold; color:#000; padding:5px 7px 0 7px; height:69px; position:relative; background-color: #74af73}
+.g3 span{background-color: #05431e;color: #FFF;font-size: 16px;position: absolute;padding:0 5px; line-height:25px;right: 15px;bottom: 6px;}
+.g5,.g4{padding:0 4px}
+.g4 p{ text-indent:24px; margin-top:5px}
+.nav{ font-size:16px}
+.g5{ line-height:30px}
+.g6{ padding:0 10px}
+.g7{text-align:center; font-size:18px; font-weight:bold; color:#FF6600}
+h3.nav{padding:3px; margin:5px 0 0 0;}
+.huodong th{color:#FF0; background-color:#900; font-weight: normal; border-right:#333 1px solid}
+.huodong th,.huodong td{ border-bottom:#333 1px solid; }
+.huodong td{ padding:5px 10px; color:#333333}
+.huodong del{ padding-right:10px}
+.huodong span,.huodong strong{ color:#F00}
+.nav_title{background-color:#9B1010}
+.order{ font-size:12px}

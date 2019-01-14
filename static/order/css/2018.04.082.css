@@ -1,0 +1,55 @@
+
+.area-bglis {
+    width: 100%;
+    height: 6rem;
+    background: #a53414;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -ms-flex-align: center;
+    align-items: center
+}
+
+.area-bglis .first {
+    width: 25%;
+    text-align: right;
+    font-size: 1.5rem;
+}
+
+.area-bglis .consont {
+    margin: 0;
+    padding: 0;
+    width: 50%;
+    text-align: center;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -ms-flex-align: center;
+    align-items: center
+}
+
+.area-bglis .consont li {
+    background: #fff;
+    -ms-flex: 1;
+    flex: 1;
+    margin: 0 10px;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.area-bglis .lestt {
+    width: 25%;
+    text-align: left;
+    font-size: 1.5rem;
+}
+

@@ -1,0 +1,6 @@
+uploadfile/
+vendor/
+.idea
+composer.lock
+composer.json
+*.log

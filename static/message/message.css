@@ -1,0 +1,22 @@
+.tab_box a.current {
+    background: #f6f8fa;
+    color: #000;
+    border: 1px solid #d1d5de;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-top-style: solid;
+    border-bottom-style: solid;
+    border-top-color: rgb(209, 213, 222);
+    border-bottom-color: rgb(209, 213, 222);
+    border-bottom: none;
+    position: relative;
+    top: 2px;
+    border-top: 2px solid #2fa4e7;
+}
+.tab_box a {
+    background: #2fa4e7;
+    display: inline-block;
+    padding: 5px 20px;
+    color: #fff;
+    font-size: 12px;
+}

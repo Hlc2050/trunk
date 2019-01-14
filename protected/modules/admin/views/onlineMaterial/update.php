@@ -1,0 +1,1647 @@
+<?php require(dirname(__FILE__) . "/../common/head.php"); ?>
+<link href="/static/lib/color/css/main.css" rel="stylesheet" type="text/css"/>
+<script src="/static/lib/color/js/script.js"></script>
+<div class="main mhead">
+    <div class="snav">推广管理 » 上线素材列表 » 修改素材</div>
+</div>
+
+<?php if($page['info']['article_type'] != 3){ ?>
+<div class="main mbody">
+</div>
+
+    <form method="post"
+          action="<?php echo $this->createUrl('onlineMaterial/edit'); ?>?p=<?php echo $_GET['p']; ?>">
+        <input type="hidden" id="id" name="id" value="<?php echo $page['info']['id']; ?>"/>
+        <input type="hidden" id="backurl" name="backurl" value="<?php echo $this->get('url'); ?>"/>
+
+        <table class="tb3">
+            <tbody>
+            <tr>
+                <td colspan="2" style="vertical-align:middle;">
+                    <span
+                            style="vertical-align:middle;font-size: large;color: dimgrey;font-weight:bold"> 标题：</span><br/>
+                    <input style="width: 500px;height:30px;font-size: large;" type="text" class="ipt" id="articleTitle"
+                           name="articleTitle"
+                           value="<?php echo $page['info']['article_title'] ? $page['info']['article_title'] : ""; ?>"/>
+                    <span style="color: red">*必填</span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="position:relative;">
+                    <span
+                            style="vertical-align:middle;font-size: large;color: dimgrey;font-weight:bold"> 正文：</span><br/>
+                    <div style="position:relative;">
+                        <textarea style="width:100%; height: 400px" id="info_body"
+                                  name="info_body"><?php echo $page['info']['content'] ? $page['info']['content'] : ''; ?></textarea>
+                        <script>
+                            var info_body = $("#info_body").xheditor({
+                                plugins: allplugin,
+                                internalScript: true,
+                                tools: "mfull",
+                                skin: "nostyle"
+                            });
+                        </script>
+                        <span class="downhttpimgbtn" id="downbtn_info_body">
+                            <a href="#" onclick="addWeChatSign()">添加微信号标识</a>&nbsp;&nbsp;
+                            <a href="#" onclick="addWeChatImg()">添加微信号图片标识</a>&nbsp;&nbsp;
+                            <a href="#" onclick="addXingXiangSign()">添加形象标识</a>
+                            <?php if ($page['info']['article_type'] == 0) { ?>
+                                <a href="#" onclick="addQuestionSign()">&nbsp;&nbsp;插入问卷</a>
+                            <?php } ?>
+                            <br/>
+                            <?php if ($page['info']['article_type'] == 0) { ?>
+                                <a onclick="return dialog_frame(this,650,400,false)"
+                                   href="<?php echo $this->createUrl('material/addReceiveStyle'); ?>">插入领取人数样式</a>&nbsp;
+                            <?php } ?>
+                            <a onclick="return dialog_frame(this,500,580,false)"
+                               href="<?php echo $this->createUrl('material/addMaterialPics'); ?>">插入素材库图片</a>&nbsp;&nbsp;
+                            <a onclick="return dialog_frame(this,500,580,false)"
+                               href="<?php echo $this->createUrl('material/addMaterialVideos'); ?>">插入素材库视频</a><br/>
+                        </span>
+                        <span class="upbtn_box" id="upbtn_box">
+                            <script>load_editor_upload("info_body");</script>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align:middle;">
+                    <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 分享链接小图：</span>
+                </td>
+                <td class="alignleft">
+                    <input type="hidden" id="cover_url" name="cover_url"
+                           value="<?php echo $page['info']['cover_url'] ?>"/>
+                    <img
+                            id="cover_show" <?php if ($page['info']['cover_url']) echo "style='width: 100px;height: 100px;'"; ?>
+                            src="<?php echo $page['info']['cover_url'] ?>">
+                    <a class="but1" onclick="return dialog_frame(this,450,580,false)"
+                       href="<?php echo $this->createUrl('material/addMaterialPics'); ?>?add_type=3">选择素材库图片</a>
+                </td>
+            </tr>
+            <?php if ($page['info']['article_type'] == 0) { ?>
+                <tr>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 顶部图片：</span>
+                    </td>
+                    <td class="alignleft">
+                        <input type="hidden" id="top_img" name="top_img"
+                               value="<?php echo $page['info']['top_img'] ?>"/>
+                        <img
+                                id="top_show" <?php if ($page['info']['top_img']) echo "style='width: 100px;height: 100px;'"; ?>
+                                src="<?php echo $page['info']['top_img'] ?>">
+                        <a class="but1" onclick="return dialog_frame(this,450,580,false)"
+                           href="<?php echo $this->createUrl('material/addMaterialPics'); ?>?add_type=1">选择素材库图片</a>
+                        <input type="checkbox" <?php echo $page['info']['level_tag'] == 1 ? 'checked' : ''; ?> value="1"
+                               type="checkbox" name="level_tag"/>&nbsp;显示
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 120px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 浏览器Title：</span>
+                    </td>
+                    <td>
+                        <input style="font-size: small;width: 300px" type="text" class="ipt" id="tag" name="tag"
+                               value="<?php echo $page['info']['tag'] ? $page['info']['tag'] : ""; ?>"/>
+                        <span style="color: red">*必填</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 80px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 描述语句：</span>
+                    </td>
+                    <td>
+                    <textarea style="font-size: small;width: 290px;height: 50px;" class="ipt" id="descriptive_statement"
+                              name="descriptive_statement"><?php echo $page['info']['descriptive_statement']; ?></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 110px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 整页铺满：</span>
+                    </td>
+                    <td>
+                        <input name="is_fill" <?php echo $page['info']['is_fill'] == 0 ? "checked" : ""; ?>
+                               type="radio" value='0'/>否&nbsp;&nbsp;
+                        <input name="is_fill" <?php echo $page['info']['is_fill'] == 1 ? "checked" : ""; ?>
+                               type="radio" value='1'/>是&nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 110px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 隐藏标题：</span>
+                    </td>
+                    <td>
+                        <input name="is_hide_title" <?php echo $page['info']['is_hide_title'] == 0 ? "checked" : ""; ?>
+                               type="radio" value='0'/>否&nbsp;&nbsp;
+                        <input name="is_hide_title" <?php echo $page['info']['is_hide_title'] == 1 ? "checked" : ""; ?>
+                               type="radio" value='1'/>是&nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 120px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 商品类型：</span>
+                    </td>
+                    <td>
+                            <?php
+                            //商品类别列表
+                            $categoryList = Linkage::model()->get_linkage_data(20);
+                            echo CHtml::dropDownList('cat_id', $page['info']['cat_id'], CHtml::listData($categoryList, 'linkage_id', 'linkage_name'),
+                                array(
+                                    'empty' => '请选择商品类型',
+                                    'ajax' => array(
+                                        'type' => 'POST',
+                                        'url' => $this->createUrl('material/getPSQByCatId'),
+                                        'update' => '#psq_id',
+                                        'data' => array('cat_id' => 'js:$("#cat_id").val()'),
+                                    )
+                                )
+                            );
+                           ?>
+                        <span style="color: red">*必选</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 100px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 问卷：</span>
+                    </td>
+                    <td>
+                        <?php
+                        echo CHtml::dropDownList('psq_id', $page['info']['psq_id'], CHtml::listData(Questionnaire::model()->getPSQByCatId($page['info']['cat_id']), 'id', 'vote_title'), array('empty' => '请选择'));
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 100px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 评论：</span>
+                    </td>
+                    <td>
+                        <input type="text" class="ipt review_title" style="width: 199px;" name="review_title"
+                               value="<?php $data = MaterialReview::model()->findByPk($page['info']['review_id']);
+                               echo $data->review_title; ?>" size="30"/>
+                        <input type="hidden" class="ipt review_id" id="review_id" name="review_id"
+                               value="<?php echo $page['info']['review_id']; ?>" size="30"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 110px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 是否开启投票页：</span>
+                    </td>
+                    <td>
+                        <input name="is_vote" <?php echo $page['info']['is_vote'] == 0 ? "checked" : ""; ?>
+                               onclick="addSth(this.value)" type="radio" value='0'/>否&nbsp;&nbsp;
+                        <input name="is_vote" <?php echo $page['info']['is_vote'] == 1 ? "checked" : ""; ?>
+                               onclick="addSth(this.value)" type="radio" value='1'/>是&nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr class="sth" <?php echo $page['info']['is_vote'] == 0 ? "hidden" : '' ?>>
+                    <td>
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold">投票页名称：</span>
+                    </td>
+                    <td>
+                        <input type="text" class="ipt vote_page" style="width: 199px;" name="vote_page"
+                               value="<?php $data = Questionnaire::model()->findByPk($page['info']['vote_id']);
+                               echo $data->vote_page; ?>" size="30"/>
+                        <input type="hidden" class="ipt vote_id" id="vote_id" name="vote_id"
+                               value="<?php echo $page['info']['vote_id']; ?>" size="30"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 80px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 形象：</span>
+                    </td>
+                    <td>
+                        <input class="ipt" id="xingxiang"
+                               name="xingxiang" value="<?php echo $page['info']['xingxiang']; ?>">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 100px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 添加固底悬浮：</span>
+                    </td>
+                    <td>
+                        <input name="bottom_type" <?php echo $page['info']['bottom_type'] == 0 ? "checked" : ""; ?>
+                               onclick="changebottom(this.value)" type="radio" value='0'/>标准样式&nbsp;&nbsp;
+                        <input name="bottom_type" <?php echo $page['info']['bottom_type'] == 1 ? "checked" : ""; ?>
+                               onclick="changebottom(this.value)" type="radio" value='1'/>头像样式&nbsp;&nbsp;
+                        <input name="bottom_type" <?php echo $page['info']['bottom_type'] == 2 ? "checked" : ""; ?>
+                               onclick="changebottom(this.value)" type="radio" value='2'/>无&nbsp;&nbsp;
+                        <input name="bottom_type" <?php echo $page['info']['bottom_type'] == 3 ? "checked" : ""; ?>
+                               onclick="changebottom(this.value)" type="radio" value='3'/>标准样式2&nbsp;&nbsp;
+                        <input name="bottom_type" <?php echo $page['info']['bottom_type'] == 4 ? "checked" : ""; ?>
+                               onclick="changebottom(this.value)" type="radio" value='4'/>标准样式3&nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr class="bottom_2" hidden>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 头像：</span>
+                    </td>
+                    <td class="alignleft">
+                        <input type="hidden" id="avater_img" name="avater_img"
+                               value="<?php echo $page['info']['avater_img'] ?>"/>
+                        <img
+                                id="avater_show" <?php if ($page['info']['avater_img']) echo "style='width: 80px;height: 80px;'"; ?>
+                                src="<?php echo $page['info']['avater_img'] ?>">
+                        <a class="but1" onclick="return dialog_frame(this,450,580,false)"
+                           href="<?php echo $this->createUrl('material/addMaterialPics'); ?>?add_type=2">选择素材库图片</a>
+                        <span style="color: red">*必填</span>
+                    </td>
+                </tr>
+                <tr class="bottom_1" hidden>
+                    <td style="vertical-align:middle;width: 80px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 固定悬浮描述：</span>
+                    </td>
+                    <td>
+                    <textarea style="font-size: small;width: 290px;height: 50px;" class="ipt" id="suspension_text"
+                              name="suspension_text"><?php echo $page['info']['suspension_text']; ?> </textarea>
+                        <span style="color: red">*必填(30字以内显示效果更好)</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>发布时间</td>
+                    <td>&nbsp;<input name="release_date" type="radio" value="0" <?php if($page['info']['release_date'] == 0){echo  "checked";} ?>>&nbsp;昨天
+                        &nbsp;<input name="release_date" type="radio" value="1" <?php if($page['info']['release_date'] == 1){echo  "checked";} ?>>&nbsp;今天
+                        &nbsp;<input name="release_date" type="radio" value="2" <?php if($page['info']['release_date'] == 2){echo  "checked";} ?>>&nbsp;&nbsp;三天前
+                        &nbsp;<input name="release_date" type="radio" value="3" <?php if(helper::checkReleaseDate($page['info']['release_date'])){echo  "checked";} ?>>&nbsp;
+                        <input type="text" id="release_date" class="ipt Wdate" style="font-size: small;width: 150px;background-color: #DDDDDD;" placeholder="请选择日期" name="release_date1" value="<?php echo helper::checkReleaseDate($page['info']['release_date']) ? date("Y-m-d",$page['info']['release_date']) : ""; ?>"  onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                    </td>
+                </tr>
+                <tr class="bottom_2" hidden>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 添加好友：</span>
+                    </td>
+                    <td class="alignleft">
+                        二维码&nbsp;<input name="addfans_type" type="radio" value="0" checked="checked"/>&nbsp;&nbsp;&nbsp;
+                        微信号&nbsp;<input name="addfans_type" type="radio"
+                                        value="1" <?php if ($page['info']['addfans_type'] == 1) echo 'checked'; ?>/>
+                    </td>
+                </tr>
+                <tr class="bottom_2" hidden>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 添加好友描述：</span>
+                    </td>
+                    <td>
+                        <input style="font-size: small;width: 300px" type="text" class="ipt" id="addfans_text"
+                               name="addfans_text"
+                               value="<?php echo $page['info']['addfans_text'] ? $page['info']['addfans_text'] : ""; ?>"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 110px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 是否开启下单框：</span>
+                    </td>
+                    <td>
+                        <input name="is_order" <?php echo $page['info']['is_order'] == 0 ? "checked" : ""; ?>
+                               onclick="addOrder(this.value)" type="radio" value='0'/>否&nbsp;&nbsp;
+                        <input name="is_order" <?php echo $page['info']['is_order'] == 1 ? "checked" : ""; ?>
+                               onclick="addOrder(this.value)" type="radio" value='1'/>是&nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr class="order" <?php echo $page['info']['is_order'] == 0 ? "hidden" : '' ?>>
+                    <td>
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold">下单模板：</span>
+                    </td>
+                    <td>
+                        <input type="text" class="ipt order_title" style="width: 199px;" name="order_title"
+                               value="<?php $data = OrderTemplete::model()->findByPk($page['info']['order_id']);
+                               echo $data->order_title; ?>" size="30"/>
+                        <input type="hidden" class="ipt order_id" id="order_id" name="order_id"
+                               value="<?php echo $page['info']['order_id']; ?>" size="30"/>
+                    </td>
+                </tr>
+                <tr class="order" <?php echo $page['info']['is_order'] == 0 ? "hidden" : '' ?>>
+                    <td>
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold">支付方式：</span>
+                    </td>
+                    <td>
+                        <?php
+                        $payment = vars::$fields['payment'];
+                        $payments = helper::decbin_digit($page['info']['payment'], count($payment));
+
+                        foreach ($payment as $key => $value) {
+                            ?>
+                            <input id='<?php echo $value['txt']; ?>' value='1' type='checkbox'
+                                   name='payment_<?php echo $value['value']; ?>' <?php echo 1 == $payments[$value['value']] ? 'checked' : '' ?>
+                                   style='width: 20px'
+                            >
+                            <label for="<?php echo $value['txt']; ?>">
+                                <span> <?php echo $value['txt']; ?></span>
+                            </label>
+                            &nbsp;&nbsp;
+                        <?php } ?>
+                    </td>
+                </tr>
+            <?php } elseif ($page['info']['article_type'] == 1) { ?>
+                <tr>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 顶部背景图：</span>
+                    </td>
+                    <td class="alignleft">
+                        <input type="hidden" id="top_img" name="top_img"
+                               value="<?php echo $page['info']['top_img'] ?>"/>
+                        <img id="top_show" style="width: 100px;height: 100px;"
+                             src="<?php echo $page['info']['top_img'] ?>">
+                        <a class="but1" onclick="return dialog_frame(this,450,580,false)"
+                           href="<?php echo $this->createUrl('material/addMaterialPics'); ?>?add_type=1">选择素材库图片</a>
+                        <span style="color: red">*必填</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 头像：</span>
+                    </td>
+                    <td class="alignleft">
+                        <input type="hidden" id="avater_img" name="avater_img"
+                               value="<?php echo $page['info']['avater_img'] ?>"/>
+                        <img id="avater_show" style="width: 80px;height: 80px;"
+                             src="<?php echo $page['info']['avater_img'] ?>">
+                        <a class="but1" onclick="return dialog_frame(this,450,580,false)"
+                           href="<?php echo $this->createUrl('material/addMaterialPics'); ?>?add_type=2">选择素材库图片</a>
+                        <span style="color: red">*必填</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="checkbox" <?php echo $page['info']['avater_tag'] == 1 ? "checked" : ""; ?>
+                               value='1' type="checkbox" name="avater_tag"/>&nbsp;头像加V标识
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 语音1：</span>
+                    </td>
+                    <td class="alignleft">
+                        <?php
+                        $audiolist = MaterialAudio::model()->getAudioList();
+                        echo CHtml::dropDownList('first_audio', $page['info']['first_audio'], CHtml::listData($audiolist, 'id', 'audio_name'),
+                            array(
+                                'empty' => '语音1',
+                            )
+                        );
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 语音2：</span>
+                    </td>
+                    <td class="alignleft">
+                        <?php
+                        $audiolist = MaterialAudio::model()->getAudioList();
+                        echo CHtml::dropDownList('second_audio', $page['info']['second_audio'], CHtml::listData($audiolist, 'id', 'audio_name'),
+                            array(
+                                'empty' => '语音2',
+                            )
+                        );
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 语音3：</span>
+                    </td>
+                    <td class="alignleft">
+                        <?php
+                        $audiolist = MaterialAudio::model()->getAudioList();
+                        echo CHtml::dropDownList('third_audio', $page['info']['third_audio'], CHtml::listData($audiolist, 'id', 'audio_name'),
+                            array(
+                                'empty' => '语音3',
+                            )
+                        );
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 100px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 推广类型：</span>
+                    </td>
+                    <td>
+                        <?php
+                        $categoryList = Linkage::model()->get_linkage_data(20);
+                        echo CHtml::dropDownList('cat_id', $page['info']['cat_id'], CHtml::listData($categoryList, 'linkage_id', 'linkage_name'),
+                            array(
+                                'empty' => '请选择',
+                                'ajax' => array(
+                                    'type' => 'POST',
+                                    'url' => $this->createUrl('material/getPSQByCatId'),
+                                    'update' => '#psq_id',
+                                    'data' => array('cat_id' => 'js:$("#cat_id").val()'),
+                                )
+                            )
+                        );
+                        ?>
+
+                        <span style="color: red">*必选</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 100px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 问卷：</span>
+                    </td>
+                    <td>
+                        <?php
+                        echo CHtml::dropDownList('psq_id', $page['info']['psq_id'], CHtml::listData(Questionnaire::model()->getPSQByCatId($page['info']['cat_id']), 'id', 'vote_title'), array('empty' => '请选择'));
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 100px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 评论：</span>
+                    </td>
+                    <td>
+                        <input type="text" class="ipt review_title" style="width: 199px;" name="review_title"
+                               value="<?php $data = MaterialReview::model()->findByPk($page['info']['review_id']);
+                               echo $data->review_title; ?>" size="30"/>
+                        <input type="hidden" class="ipt review_id" id="review_id" name="review_id"
+                               value="<?php echo $page['info']['review_id']; ?>" size="30"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 110px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 是否开启投票页：</span>
+                    </td>
+                    <td>
+                        <input name="is_vote" <?php echo $page['info']['is_vote'] == 0 ? "checked" : ""; ?>
+                               onclick="addSth(this.value)" type="radio" value='0'/>否&nbsp;&nbsp;
+                        <input name="is_vote" <?php echo $page['info']['is_vote'] == 1 ? "checked" : ""; ?>
+                               onclick="addSth(this.value)" type="radio" value='1'/>是&nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr class="sth" <?php echo $page['info']['is_vote'] == 0 ? "hidden" : '' ?>>
+                    <td>
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold">投票页名称：</span>
+                    </td>
+                    <td>
+                        <input type="text" class="ipt vote_page" style="width: 199px;" name="vote_page"
+                               value="<?php $data = Questionnaire::model()->findByPk($page['info']['vote_id']);
+                               echo $data->vote_page; ?>" size="30"/>
+                        <input type="hidden" class="ipt vote_id" id="vote_id" name="vote_id"
+                               value="<?php echo $page['info']['vote_id']; ?>" size="30"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 100px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 顶部字体颜色：</span>
+                    </td>
+                    <td>
+                        <div class="preview"
+                             style="background-color: <?php echo $page['info']['top_color'] ? $page['info']['top_color'] : 'rgb(255, 102, 153)'; ?>">
+                        </div>
+                        <div class="colorpicker" style="display:none">
+                            <canvas id="picker" var="1" width="200" height="200"></canvas>
+
+                            <div class="color-controls">
+                                <div><label>R</label> <input type="text" id="rVal"/></div>
+                                <div><label>G</label> <input type="text" id="gVal"/></div>
+                                <div><label>B</label> <input type="text" id="bVal"/></div>
+                                <div><label>RGB</label> <input type="text" id="rgbVal"/></div>
+                                <div><label>HEX</label> <input type="text" id="hexVal"/></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <input type="hidden" id="top_color" name="top_color"
+                       value="<?php echo $page['info']['top_color'] ? $page['info']['top_color'] : '#FF679A' ?>"/>
+
+                <tr>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 身份：</span>
+                    </td>
+                    <td class="alignleft">
+                        <input style="font-size: small;width: 300px" type="text" class="ipt" id="tag" name="idintity"
+                               value="<?php echo $page['info']['idintity'] ? $page['info']['idintity'] : ""; ?>"/>
+                        <span style="color: red">*必填</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="checkbox" <?php echo $page['info']['level_tag'] == 1 ? 'checked' : ''; ?> value="1"
+                               type="checkbox" name="level_tag"/>&nbsp;等级标识
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 顶部按钮描述：</span>
+                    </td>
+                    <td>
+                        <input style="font-size: small;width: 300px" type="text" class="ipt" id="top_text"
+                               name="top_text"
+                               value="<?php echo $page['info']['top_text'] ? $page['info']['top_text'] : ""; ?>"/>
+                        <span style="color: red">*必填(六个字最佳)</span>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 80px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 浏览器Title：</span>
+                    </td>
+                    <td>
+                        <input style="font-size: small;width: 300px" type="text" class="ipt" id="tag" name="tag"
+                               value="<?php echo $page['info']['tag'] ? $page['info']['tag'] : ""; ?>"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 80px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 描述语句：</span>
+                    </td>
+                    <td>
+                    <textarea style="font-size: small;width: 290px;height: 50px;" class="ipt" id="descriptive_statement"
+                              name="descriptive_statement"><?php echo $page['info']['descriptive_statement']; ?></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 80px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 形象：</span>
+                    </td>
+                    <td>
+                        <input class="ipt" id="xingxiang"
+                               name="xingxiang" value="<?php echo $page['info']['xingxiang']; ?>">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 100px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 添加固底悬浮：</span>
+                    </td>
+                    <td>
+                        <input name="bottom_type" checked
+                               onclick="changebottom(this.value)" type="radio" value='1'/>头像样式&nbsp;&nbsp;
+                        <input name="bottom_type" <?php echo $page['info']['bottom_type'] == 2 ? "checked" : ""; ?>
+                               onclick="changebottom(this.value)" type="radio" value='2'/>无&nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr class="bottom_2" <?php echo $page['info']['bottom_type'] == 2 ? "hidden" : ""; ?>>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 固定悬浮描述：</span>
+                    </td>
+                    <td>
+                        <input style="font-size: small;width: 300px" type="text" class="ipt" id="suspension_text"
+                               name="suspension_text"
+                               value="<?php echo $page['info']['suspension_text'] ? $page['info']['suspension_text'] : ""; ?>"/>
+                        <span style="color: red">*必填(十个字以内为佳)</span>&nbsp;
+                    </td>
+                </tr>
+                <tr class="bottom_2" <?php echo $page['info']['bottom_type'] == 2 ? "hidden" : ""; ?> >
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 添加好友：</span>
+                    </td>
+                    <td class="alignleft">
+                        二维码&nbsp;<input name="addfans_type" type="radio" value="0" checked="checked"/>&nbsp;&nbsp;&nbsp;
+                        微信号&nbsp;<input name="addfans_type" type="radio"
+                                        value="1" <?php if ($page['info']['addfans_type'] == 1) echo 'checked'; ?>/>
+                    </td>
+                </tr>
+                <tr class="bottom_2" <?php echo $page['info']['bottom_type'] == 2 ? "hidden" : ""; ?>>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 添加好友描述：</span>
+                    </td>
+                    <td>
+                        <input style="font-size: small;width: 300px" type="text" class="ipt" id="addfans_text"
+                               name="addfans_text"
+                               value="<?php echo $page['info']['addfans_text'] ? $page['info']['addfans_text'] : ""; ?>"/>
+                    </td>
+                </tr>
+            <?php } else if ($page['info']['article_type'] == 2) { ?>
+                <tr>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 文章导航：</span>
+                    </td>
+                    <td>
+                        <input style="font-size: small;width: 300px" type="text" class="ipt" id="top_text"
+                               name="top_text"
+                               value="<?php echo $page['info']['top_text'] ? $page['info']['top_text'] : ""; ?>"/>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 顶部背景图：</span>
+                    </td>
+                    <td class="alignleft">
+                        <input type="hidden" id="top_img" name="top_img"
+                               value="<?php echo $page['info']['top_img'] ?>"/>
+                        <img id="top_show" style="width: 100px;height: 100px;"
+                             src="<?php echo $page['info']['top_img'] ?>">
+                        <a class="but1" onclick="return dialog_frame(this,450,580,false)"
+                           href="<?php echo $this->createUrl('material/addMaterialPics'); ?>?add_type=1">选择素材库图片</a>
+                        <input type="checkbox" <?php echo $page['info']['level_tag'] == 1 ? 'checked' : ''; ?> value="1"
+                               name="level_tag"/>&nbsp;显示
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 时间：</span>
+                    </td>
+                    <td class="alignleft">
+                        <input style="font-size: small;width: 300px" type="text" class="ipt" id="tag" name="idintity"
+                               value="<?php echo $page['info']['idintity'] ? $page['info']['idintity'] : ""; ?>"/>
+                        <span style="color: red">*必填</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 100px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 推广类型：</span>
+                    </td>
+                    <td>
+                        <?php
+                        $categoryList = Linkage::model()->get_linkage_data(20);
+                        echo CHtml::dropDownList('cat_id', $page['info']['cat_id'], CHtml::listData($categoryList, 'linkage_id', 'linkage_name'),
+                            array(
+                                'empty' => '请选择',
+                                'ajax' => array(
+                                    'type' => 'POST',
+                                    'url' => $this->createUrl('material/getPSQByCatId'),
+                                    'update' => '#psq_id',
+                                    'data' => array('cat_id' => 'js:$("#cat_id").val()'),
+                                )
+                            )
+                        );
+                        ?>
+
+                        <span style="color: red">*必选</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 100px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 评论：</span>
+                    </td>
+                    <td>
+                        <?php
+                        $reviewList = MaterialReview::model()->getForumReviewList();
+                        echo CHtml::dropDownList('review_id', $page['info']['review_id'], CHtml::listData($reviewList, 'id', 'review_title'),
+                            array(
+                                'empty' => '请选择',
+                            )
+                        );
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 80px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 浏览器Title：</span>
+                    </td>
+                    <td>
+                        <input style="font-size: small;width: 300px" type="text" class="ipt" id="tag" name="tag"
+                               value="<?php echo $page['info']['tag'] ? $page['info']['tag'] : ""; ?>"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 80px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 描述语句：</span>
+                    </td>
+                    <td>
+                    <textarea style="font-size: small;width: 290px;height: 50px;" class="ipt" id="descriptive_statement"
+                              name="descriptive_statement"><?php echo $page['info']['descriptive_statement']; ?></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 80px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 形象：</span>
+                    </td>
+                    <td>
+                        <input class="ipt" id="xingxiang"
+                               name="xingxiang" value="<?php echo $page['info']['xingxiang']; ?>">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:middle;width: 100px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 添加固底悬浮：</span>
+                    </td>
+                    <td>
+                        <input name="bottom_type" checked
+                               onclick="changebottom(this.value)" type="radio" value='1'/>头像样式&nbsp;&nbsp;
+                        <input name="bottom_type" <?php echo $page['info']['bottom_type'] == 2 ? "checked" : ""; ?>
+                               onclick="changebottom(this.value)" type="radio" value='2'/>无&nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr class="bottom_2" <?php echo $page['info']['bottom_type'] == 2 ? "hidden" : ""; ?>>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 头像：</span>
+                    </td>
+                    <td class="alignleft">
+                        <input type="hidden" id="avater_img" name="avater_img"
+                               value="<?php echo $page['info']['avater_img'] ?>"/>
+                        <img
+                                id="avater_show" <?php if ($page['info']['avater_img']) echo "style='width: 80px;height: 80px;'"; ?>
+                                src="<?php echo $page['info']['avater_img'] ?>">
+                        <a class="but1" onclick="return dialog_frame(this,450,580,false)"
+                           href="<?php echo $this->createUrl('material/addMaterialPics'); ?>?add_type=2">选择素材库图片</a>
+                        <span style="color: red">*必填</span>
+                    </td>
+                </tr>
+                <tr class="bottom_2" <?php echo $page['info']['bottom_type'] == 2 ? "hidden" : ""; ?>>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 固定悬浮描述：</span>
+                    </td>
+                    <td>
+                        <input style="font-size: small;width: 300px" type="text" class="ipt" id="suspension_text"
+                               name="suspension_text"
+                               value="<?php echo $page['info']['suspension_text'] ? $page['info']['suspension_text'] : ""; ?>"/>
+                        <span style="color: red">*必填(十个字以内为佳)</span>&nbsp;
+                    </td>
+                </tr>
+                <tr class="bottom_2" <?php echo $page['info']['bottom_type'] == 2 ? "hidden" : ""; ?> >
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 添加好友：</span>
+                    </td>
+                    <td class="alignleft">
+                        二维码&nbsp;<input name="addfans_type" type="radio" value="0" checked="checked"/>&nbsp;&nbsp;&nbsp;
+                        微信号&nbsp;<input name="addfans_type" type="radio"
+                                        value="1" <?php if ($page['info']['addfans_type'] == 1) echo 'checked'; ?>/>
+                    </td>
+                </tr>
+                <tr class="bottom_2" <?php echo $page['info']['bottom_type'] == 2 ? "hidden" : ""; ?>>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 添加好友描述：</span>
+                    </td>
+                    <td>
+                        <input style="font-size: small;width: 300px" type="text" class="ipt" id="addfans_text"
+                               name="addfans_text"
+                               value="<?php echo $page['info']['addfans_text'] ? $page['info']['addfans_text'] : ""; ?>"/>
+                    </td>
+                </tr>
+            <?php } ?>
+            <tr>
+                <td style="vertical-align:middle;">
+                    <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 弹出聊天框时间：</span>
+                </td>
+                <td>
+                    <input style="font-size: small;width: 50px" type="text" class="ipt" id="pop_time" name="pop_time"
+                           value="<?php echo $page['info']['pop_time'] ? $page['info']['pop_time'] : ""; ?>"/>&nbsp;秒
+                    &nbsp;&nbsp; （进入立即出现填0，放空或者<0表示不弹窗）
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align:middle;">
+                    <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 人物介绍：</span>
+                </td>
+                <td>
+                    <input style="font-size: small;width: 300px" type="text" class="ipt" id="char_intro"
+                           name="char_intro"
+                           value="<?php echo $page['info']['char_intro'] ? $page['info']['char_intro'] : ""; ?>"/>
+                    <span style="color: red">*最多8个字</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align:middle;">
+                    <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 聊天内容：</span>
+                </td>
+                <td>
+                    <input style="font-size: small;width: 300px" type="text" class="ipt" id="chat_content"
+                           name="chat_content"
+                           value="<?php echo $page['info']['chat_content'] ? $page['info']['chat_content'] : ""; ?>"/>
+                    <span style="color: red">最多16个字</span>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td class="alignleft">
+                    <input style="font-size: medium" type="submit" class="but" id="subtn" value="保存"/>&nbsp;&nbsp;&nbsp;
+                    <input style="font-size: medium" type="button" class="but" value="返回"
+                           onclick="window.location='<?php echo $this->get('url'); ?>'"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+<?php }else{ ?>
+    <div class="mt10">
+        <div class="tab_box">
+            <a href="javascript:;" onclick="touchNav(1)" class="current" id="Page_1">主页面图文标题</a>
+            <a href="javascript:;" onclick="touchNav(2)" id="Page_2">返回页面图文标题</a>
+            <a href="javascript:;" onclick="touchNav(3)" id="Page_3">作者页面图文标题</a>
+            <a href="javascript:;" onclick="touchNav(4)" id="Page_4">阅读原文页面图文标题</a>
+        </div>
+    </div>
+    <?php
+    $sql = "select * FROM online_material_manage WHERE promotion_id=".$page['info']['promotion_id']." AND article_code= '".$page['info']['article_code']."'order by id";
+    $data = Yii::app()->db->createCommand($sql)->queryAll();
+    $str =$data[0]['id'].','.$data[1]['id'].','.$data[2]['id'].','.$data[3]['id'];
+    ?>
+
+    <form method="post" action="<?php echo $this->createUrl('onlineMaterial/edit'); ?>?article_type=3&p=<?php echo $_GET['p']; ?>">
+        <input type="hidden" id="id" name="id" value="<?php echo $page['info']['id']; ?>"/>
+        <input type="hidden" id="weChat_id" name="weChat_id" value="<?php echo $str?$str:""; ?>"/>
+        <input type="hidden"  name="backurl" value="<?php echo $this->get('url') ?>"/>
+        <div id="turnPage_1" style="display:block;">
+            <table class="tb3">
+                <tbody>
+                <!--            空行-->
+                <tr>
+                    <td style="height:3px;"></td>
+                </tr>
+                <!--            主页面图文标题-->
+                <tr>
+                    <td colspan="2" style="vertical-align:middle;">
+                    <span
+                            style="vertical-align:middle;font-size: large;color: dimgrey;font-weight:bold"> 主页面图文标题：</span><br/>
+                        <input style="width: 500px;height:30px;font-size: large;" type="text" class="ipt" id="mainTitle"
+                               name="main_title"
+                               value="<?php echo $data[0]['article_title'] ? $data[0]['article_title'] : ""; ?>"/>
+                        <span style="color: red">*必填</span>
+                    </td>
+                </tr>
+                <!--            正文-->
+                <tr>
+                    <td colspan="2" style="position:relative;">
+                    <span style="vertical-align:middle;font-size: large;color: dimgrey;font-weight:bold">
+                        正文：
+                    </span>
+
+                        <br/>
+                        <div style="position:relative;">
+                        <textarea style="width:100%; height: 400px" id="info_body1"
+                                  name="info_body1"><?php echo $data[0]['content'] ? $data[0]['content'] : ''; ?></textarea>
+                            <script>
+                                var info_body1 = $("#info_body1").xheditor({
+                                    plugins: allplugin,
+                                    internalScript: true,
+                                    tools: "mfull",
+                                    skin: "nostyle",
+
+                                });
+                            </script>
+                            <span class="downhttpimgbtn" id="downbtn_info_body">
+                            <a href="#" onclick="addWeChatSign(1)">添加微信号标识</a>&nbsp;&nbsp;
+                            <a href="#" onclick="addWeChatImg(1)">添加微信号图片标识</a>&nbsp;&nbsp;
+                            <a href="#" onclick="addXingXiangSign(1)">添加形象标识</a><br/>
+                            <a onclick="return dialog_frame(this,650,400,false)"
+                               href="<?php echo $this->createUrl('material/addReceiveStyle?num=1'); ?>">插入领取人数样式</a>&nbsp;
+                            <a onclick="return dialog_frame(this,500,580,false)"
+                               href="<?php echo $this->createUrl('material/addMaterialPics?num=1'); ?>">插入素材库图片</a>&nbsp;&nbsp;
+                            <a onclick="return dialog_frame(this,500,580,false)"
+                               href="<?php echo $this->createUrl('material/addMaterialVideos?num=1'); ?>">插入素材库视频</a><br/>
+                        </span>
+                            <button class="upbtn_box">本地上传<input type="file"></button>
+                            <script>load_editor_upload("info_body1");</script>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+                <!--            分享链接小图-->
+                <tr>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 分享链接小图：</span>
+                    </td>
+                    <td class="alignleft">
+                        <input type="hidden" id="cover_url1" name="cover_url1"
+                               value="<?php echo $data[0]['cover_url']?$data[0]['cover_url']:'' ?>"/>
+                        <img
+                                id="cover_show1" <?php if ( $data[0]['cover_url']) echo "style='width: 100px;height: 100px;'"; ?>
+                                src="<?php echo  $data[0]['cover_url']?$data[0]['cover_url']:"" ?>">
+                        <a class="but1" onclick="return dialog_frame(this,450,580,false)"
+                           href="<?php echo $this->createUrl('material/addMaterialPics'); ?>?add_type=3&&num=1">选择素材库图片</a>
+                    </td>
+                </tr>
+                <!--            浏览器Title-->
+                <tr>
+                    <td style="vertical-align:middle;width: 80px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 浏览器Title：</span>
+                    </td>
+                    <td>
+                        <input style="font-size: small;width: 300px" type="text" class="ipt" id="tag_1" name="tag_1"
+                               value="<?php echo $data[0]['tag'] ? $data[0]['tag'] : ""; ?>"/>
+                    </td>
+                </tr>
+                <!--            商品类型-->
+                <tr>
+                    <td style="vertical-align:middle;width: 80px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 商品类型：</span>
+                    </td>
+                    <td>
+                        <select name="cat_id">
+                            <option value="" selected>
+                                请选择类型
+                            </option>
+                            <?php
+                            //商品类别列表
+                            $categoryList = Linkage::model()->getGoodsCategoryList();
+                            foreach ($categoryList as $key => $val) { ?>
+                                <option
+                                        value="<?php echo $key; ?>" <?php echo $key == $data[0]['cat_id'] ? 'selected' : ''; ?>>
+                                    <?php echo $val; ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                        <span style="color: red">*必选</span>
+                    </td>
+                </tr>
+                <!--            形象-->
+                <tr>
+                    <td style="vertical-align:middle;width: 80px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 形象：</span>
+                    </td>
+                    <td>
+                        <input class="ipt" id="xingxiang"
+                               name="xingxiang" value="<?php echo $data[0]['xingxiang']?$data[0]['xingxiang']:""; ?>">
+                    </td>
+                </tr>
+
+                <!--            描述语句-->
+                <tr>
+                    <td style="vertical-align:middle;width: 80px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 描述语句：</span>
+                    </td>
+                    <td>
+                    <textarea style="font-size: small;width: 290px;height: 50px;" class="ipt" id="descriptive_statement"
+                              name="descriptive_statement"><?php echo $data[0]['descriptive_statement']?$data[0]['descriptive_statement']:""; ?></textarea>
+                    </td>
+                </tr>
+                <!--                发布时间-->
+                <tr>
+                    <td>发布时间</td>
+                    <td>&nbsp;<input name="release_date" type="radio" value="0" <?php if($page['info']['release_date'] == 0){echo  "checked";} ?>>&nbsp;昨天
+                        &nbsp;<input name="release_date" type="radio" value="1" <?php if($page['info']['release_date'] == 1){echo  "checked";} ?>>&nbsp;今天
+                        &nbsp;<input name="release_date" type="radio" value="2" <?php if($page['info']['release_date'] == 2){echo  "checked";} ?>>&nbsp;&nbsp;三天前
+                        &nbsp;<input name="release_date" type="radio" value="3" <?php if(helper::checkReleaseDate($page['info']['release_date'])){echo  "checked";} ?>>&nbsp;
+                        <input type="text" id="release_date" class="ipt Wdate" style="font-size: small;width: 150px;background-color: #DDDDDD;" placeholder="请选择日期" name="release_date1" value="<?php echo helper::checkReleaseDate($page['info']['release_date']) ? date("Y-m-d",$page['info']['release_date']) : ""; ?>"  onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                    </td>
+                </tr>
+                <!--            作者名-->
+                <tr>
+                    <td style="vertical-align:middle;width: 80px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 作者名：</span>
+                    </td>
+                    <td>
+                        <input style="font-size: small;width: 300px" type="text" class="ipt" id="author" name="author"
+                               value="<?php echo $data[0]['suspension_text'] ? $data[0]['suspension_text'] : ""; ?>"/>
+                    </td>
+                </tr>
+                <!--            点赞数-->
+                <tr>
+                    <td style="vertical-align:middle;width: 80px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 点赞数：</span>
+                    </td>
+                    <td>
+                        <input style="font-size: small;width: 300px" type="text" class="ipt" id="thumb_up" name="thumb_up"
+                               value="<?php echo $data[0]['first_audio'] ? $data[0]['first_audio'] : ""; ?>"/>
+                    </td>
+                </tr>
+                <!--            阅读数-->
+                <tr>
+                    <td style="vertical-align:middle;width: 80px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 阅读数：</span>
+                    </td>
+                    <td>
+                        <input style="font-size: small;width: 300px" type="text" class="ipt" id="read_num" name="read_num"
+                               value="<?php echo $data[0]['second_audio'] ? $data[0]['second_audio'] : ""; ?>"/>
+                    </td>
+                </tr>
+                <!--            开启返回页面功能-->
+                <tr>
+                    <td style="vertical-align:middle;width: 110px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 开启返回页面功能：</span>
+                    </td>
+                    <td>
+                        <!--                    $data[0]['is_hide_title'] == 1 ? "checked" : "";-->
+                        <input name="is_rtn" <?php  if(!$data){echo  "checked";}else{echo $data[0]['is_hide_title'] == 1 ? "checked" : "";} ?>
+                               type="radio" value='1'/>开启&nbsp;&nbsp;
+                        <input name="is_rtn" <?php  if($data){echo$data[0]['is_hide_title'] == 0 ? "checked" : "";} ?>
+                               type="radio" value='0'/>关闭&nbsp;&nbsp;
+                    </td>
+                </tr>
+                <!--            开启作者页面功能-->
+                <tr>
+                    <td style="vertical-align:middle;width: 110px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 开启作者页面功能：</span>
+                    </td>
+                    <td>
+                        <input name="is_au_article" <?php if(!$data){echo  "checked";}else{echo $data[0]['is_fill'] == 1 ? "checked" : ""; }?>
+                               type="radio" value='1'/>开启&nbsp;&nbsp;
+                        <input name="is_au_article" <?php if($data){ echo $data[0]['is_fill'] == 0 ? "checked" : ""; }?>
+                               type="radio" value='0'/>关闭&nbsp;&nbsp;
+                    </td>
+                </tr>
+                <!--            保存-->
+                <tr>
+                    <td></td>
+                    <td class="alignleft">
+                        <input style="font-size: medium" type="submit" class="but"  value="保存"  onclick="window.location='<?php echo $this->get('url') ? $this->get('url') : $this->createUrl('material/index'); ?>'"/>&nbsp;&nbsp;&nbsp;
+                        <?php $this->check_u_menu(array('code' => '<input value="另存为" style="font-size: medium" type="button" class="but" onclick="return save_as(this,300,150,false)" href="' . $this->createUrl('material/saveAs') . '"/>', 'auth_tag' => 'material_saveAs')); ?>
+                        &nbsp;&nbsp;&nbsp;
+                        <input style="font-size: medium" type="button" class="but" value="返回"
+                               onclick="window.location='<?php echo $this->get('url') ? $this->get('url') : $this->createUrl('material/index'); ?>'"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="turnPage_2" style="display:none;">
+            <table class="tb3">
+                <tbody>
+                <!--            空行-->
+                <tr>
+                    <td style="height:3px;"></td>
+                </tr>
+                <!--  返回页面图文标题-->
+                <tr>
+                    <td colspan="2" style="vertical-align:middle;">
+                    <span
+                            style="vertical-align:middle;font-size: large;color: dimgrey;font-weight:bold"> 返回页面图文标题：</span><br/>
+                        <input style="width: 500px;height:30px;font-size: large;" type="text" class="ipt" id="rtn_Title"
+                               name="rtn_Title"
+                               value="<?php echo $data[1]['article_title'] ? $data[1]['article_title'] : ""; ?>"/>
+                        <span style="color: red">*必填</span>
+                    </td>
+                </tr>
+                <!--  正文-->
+                <tr>
+                    <td colspan="2" style="position:relative;">
+                    <span style="vertical-align:middle;font-size: large;color: dimgrey;font-weight:bold">
+                        正文：
+                    </span>
+
+                        <br/>
+                        <div style="position:relative;">
+                        <textarea style="width:100%; height: 400px" id="info_body2"
+                                  name="info_body2"><?php echo $data[1]['content'] ? $data[1]['content'] : ''; ?></textarea>
+                            <script>
+                                var info_body = $("#info_body2").xheditor({
+                                    plugins: allplugin,
+                                    internalScript: true,
+                                    tools: "mfull",
+                                    skin: "nostyle",
+
+                                });
+                            </script>
+                            <span class="downhttpimgbtn" id="downbtn_info_body">
+                            <a href="#" onclick="addWeChatSign(2)">添加微信号标识</a>&nbsp;&nbsp;
+                            <a href="#" onclick="addWeChatImg(2)">添加微信号图片标识</a>&nbsp;&nbsp;
+                            <a href="#" onclick="addXingXiangSign(2)">添加形象标识</a><br/>
+                            <a onclick="return dialog_frame(this,650,400,false)"
+                               href="<?php echo $this->createUrl('material/addReceiveStyle?num=2'); ?>">插入领取人数样式</a>&nbsp;
+                            <a onclick="return dialog_frame(this,500,580,false)"
+                               href="<?php echo $this->createUrl('material/addMaterialPics?num=2'); ?>">插入素材库图片</a>&nbsp;&nbsp;
+                            <a onclick="return dialog_frame(this,500,580,false)"
+                               href="<?php echo $this->createUrl('material/addMaterialVideos?num=2'); ?>">插入素材库视频</a><br/>
+                        </span>
+                            <button class="upbtn_box">本地上传<input type="file" ></button>
+                            <script>load_editor_upload("info_body2");</script>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+                <!--分享链接小图-->
+                <tr>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 分享链接小图：</span>
+                    </td>
+                    <td class="alignleft">
+                        <input type="hidden" id="cover_url2" name="cover_url2"
+                               value="<?php echo $data[1]['cover_url']?$data[1]['cover_url']:"" ?>"/>
+                        <img
+                                id="cover_show2" <?php if ($data[1]['cover_url']) echo "style='width: 100px;height: 100px;'"; ?>
+                                src="<?php echo $data[1]['cover_url']?$data[1]['cover_url']:"" ?>">
+                        <a class="but1" onclick="return dialog_frame(this,450,580,false)"
+                           href="<?php echo $this->createUrl('material/addMaterialPics'); ?>?add_type=3&&num=2">选择素材库图片</a>
+                    </td>
+                </tr>
+                <!--浏览器Title-->
+                <tr>
+                    <td style="vertical-align:middle;width: 110px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 浏览器Title：</span>
+                    </td>
+                    <td>
+                        <input style="font-size: small;width: 300px" type="text" class="ipt" id="tag_2" name="tag_2"
+                               value="<?php echo $data[1]['tag'] ? $data[1]['tag'] : ""; ?>"/>
+                    </td>
+                </tr>
+                <!--   跳转链接-->
+                <tr>
+                    <td style="vertical-align:middle;width: 110px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 跳转链接：</span>
+                    </td>
+                    <td>
+                        <input style="font-size: small;width: 300px" type="text" class="ipt" id="link1" name="link1"
+                               value="<?php echo $data[1]['link'] ? $data[1]['link'] : ""; ?>"/>
+                    </td>
+                </tr>
+                <!--保存-->
+                <tr>
+                    <td></td>
+                    <td class="alignleft">
+                        <input style="font-size: medium" type="submit" class="but"  value="保存"/>&nbsp;&nbsp;&nbsp;
+                        <?php $this->check_u_menu(array('code' => '<input value="另存为" style="font-size: medium" type="button" class="but" onclick="return save_as(this,300,150,false)" href="' . $this->createUrl('material/saveAs') . '"/>', 'auth_tag' => 'material_saveAs')); ?>
+                        &nbsp;&nbsp;&nbsp;
+                        <input style="font-size: medium" type="button" class="but" value="返回"
+                               onclick="window.location='<?php echo $this->get('url') ? $this->get('url') : $this->createUrl('material/index'); ?>'"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div id="turnPage_3" style="display:none;">
+            <table class="tb3">
+                <tbody>
+                <!--            空行-->
+                <tr>
+                    <td style="height:3px;"></td>
+                </tr>
+                <!--        作者页面图文标题-->
+                <tr>
+                    <td colspan="2" style="vertical-align:middle;">
+                    <span
+                            style="vertical-align:middle;font-size: large;color: dimgrey;font-weight:bold"> 作者页面图文标题：</span><br/>
+                        <input style="width: 500px;height:30px;font-size: large;" type="text" class="ipt" id="au_title"
+                               name="au_title"
+                               value="<?php echo $data[2]['article_title'] ? $data[2]['article_title'] : ""; ?>"/>
+                        <span style="color: red">*必填</span>
+                    </td>
+                </tr>
+                <!--正文-->
+                <tr>
+                    <td colspan="2" style="position:relative;">
+                    <span style="vertical-align:middle;font-size: large;color: dimgrey;font-weight:bold">
+                        正文：
+                    </span>
+
+                        <br/>
+                        <div style="position:relative;">
+                        <textarea style="width:100%; height: 400px" id="info_body3"
+                                  name="info_body3"><?php echo $data[2]['content'] ? $data[2]['content'] : ''; ?></textarea>
+                            <script>
+                                var info_body = $("#info_body3").xheditor({
+                                    plugins: allplugin,
+                                    internalScript: true,
+                                    tools: "mfull",
+                                    skin: "nostyle",
+
+                                });
+                            </script>
+                            <span class="downhttpimgbtn" id="downbtn_info_body">
+                            <a href="#" onclick="addWeChatSign(3)">添加微信号标识</a>&nbsp;&nbsp;
+                            <a href="#" onclick="addWeChatImg(3)">添加微信号图片标识</a>&nbsp;&nbsp;
+                            <a href="#" onclick="addXingXiangSign(3)">添加形象标识</a><br/>
+                            <a onclick="return dialog_frame(this,650,400,false)"
+                               href="<?php echo $this->createUrl('material/addReceiveStyle?num=3'); ?>">插入领取人数样式</a>&nbsp;
+                            <a onclick="return dialog_frame(this,500,580,false)"
+                               href="<?php echo $this->createUrl('material/addMaterialPics?num=3'); ?>">插入素材库图片</a>&nbsp;&nbsp;
+                            <a onclick="return dialog_frame(this,500,580,false)"
+                               href="<?php echo $this->createUrl('material/addMaterialVideos?num=3'); ?>">插入素材库视频</a><br/>
+                        </span>
+                            <button class="upbtn_box">本地上传<input type="file" ></button>
+                            <script>load_editor_upload("info_body3");</script>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+                <!--分享链接小图-->
+                <tr>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 分享链接小图：</span>
+                    </td>
+                    <td class="alignleft">
+                        <input type="hidden" id="cover_url3" name="cover_url3"
+                               value="<?php echo $data[2]['cover_url']?$data[2]['cover_url']:"" ?>"/>
+                        <img
+                                id="cover_show3" <?php if ($data[2]['cover_url']) echo "style='width: 100px;height: 100px;'"; ?>
+                                src="<?php echo $data[2]['cover_url']?$data[2]['cover_url']:"" ?>">
+                        <a class="but1" onclick="return dialog_frame(this,450,580,false)"
+                           href="<?php echo $this->createUrl('material/addMaterialPics'); ?>?add_type=3&&num=3">选择素材库图片</a>
+                    </td>
+                </tr>
+                <!--浏览器Title-->
+                <tr>
+                    <td style="vertical-align:middle;width: 110px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 浏览器Title：</span>
+                    </td>
+                    <td>
+                        <input style="font-size: small;width: 300px" type="text" class="ipt" id="tag_3" name="tag_3"
+                               value="<?php echo $data[2]['tag'] ? $data[2]['tag'] : ""; ?>"/>
+                    </td>
+                </tr>
+                <!--   跳转链接-->
+                <tr>
+                    <td style="vertical-align:middle;width: 110px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 跳转链接：</span>
+                    </td>
+                    <td>
+                        <input style="font-size: small;width: 300px" type="text" class="ipt" id="link2" name="link2"
+                               value="<?php echo $data[2]['link'] ? $data[2]['link'] : ""; ?>"/>
+                    </td>
+                </tr>
+                <!--保存-->
+                <tr>
+                    <td></td>
+                    <td class="alignleft">
+                        <input style="font-size: medium" type="submit" class="but" value="保存"/>&nbsp;&nbsp;&nbsp;
+                        <?php $this->check_u_menu(array('code' => '<input value="另存为" style="font-size: medium" type="button" class="but" onclick="return save_as(this,300,150,false)" href="' . $this->createUrl('material/saveAs') . '"/>', 'auth_tag' => 'material_saveAs')); ?>
+                        &nbsp;&nbsp;&nbsp;
+                        <input style="font-size: medium" type="button" class="but" value="返回"
+                               onclick="window.location='<?php echo $this->get('url') ? $this->get('url') : $this->createUrl('material/index'); ?>'"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="turnPage_4" style="display:none;">
+            <table class="tb3">
+                <tbody>
+                <!--            空行-->
+                <tr>
+                    <td style="height:3px;"></td>
+                </tr>
+                <!--        阅读页面图文标题        -->
+                <tr>
+                    <td colspan="2" style="vertical-align:middle;">
+                    <span
+                            style="vertical-align:middle;font-size: large;color: dimgrey;font-weight:bold"> 阅读页面图文标题：</span><br/>
+                        <input style="width: 500px;height:30px;font-size: large;" type="text" class="ipt" id="read_title"
+                               name="read_title"
+                               value="<?php echo $data[3]['article_title'] ? $data[3]['article_title'] : ""; ?>"/>
+                        <span style="color: red">*必填</span>
+                    </td>
+                </tr>
+                <!--正文-->
+                <tr>
+                    <td colspan="2" style="position:relative;">
+                    <span style="vertical-align:middle;font-size: large;color: dimgrey;font-weight:bold">
+                        正文：
+                    </span>
+
+                        <br/>
+                        <div style="position:relative;">
+                        <textarea style="width:100%; height: 400px" id="info_body4"
+                                  name="info_body4"><?php echo $data[3]['content'] ? $data[3]['content'] : ''; ?></textarea>
+                            <script>
+                                var info_body = $("#info_body4").xheditor({
+                                    plugins: allplugin,
+                                    internalScript: true,
+                                    tools: "mfull",
+                                    skin: "nostyle",
+
+                                });
+                            </script>
+                            <span class="downhttpimgbtn" id="downbtn_info_body">
+                            <a href="#" onclick="addWeChatSign(4)">添加微信号标识</a>&nbsp;&nbsp;
+                            <a href="#" onclick="addWeChatImg(4)">添加微信号图片标识</a>&nbsp;&nbsp;
+                            <a href="#" onclick="addXingXiangSign(4)">添加形象标识</a><br/>
+                            <a onclick="return dialog_frame(this,650,400,false)"
+                               href="<?php echo $this->createUrl('material/addReceiveStyle?num=4'); ?>">插入领取人数样式</a>&nbsp;
+                            <a onclick="return dialog_frame(this,500,580,false)"
+                               href="<?php echo $this->createUrl('material/addMaterialPics?num=4'); ?>">插入素材库图片</a>&nbsp;&nbsp;
+                            <a onclick="return dialog_frame(this,500,580,false)"
+                               href="<?php echo $this->createUrl('material/addMaterialVideos?num=4'); ?>">插入素材库视频</a><br/>
+                        </span>
+                            <button class="upbtn_box">本地上传<input type="file" ></button>
+                            <script>load_editor_upload("info_body4");</script>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+                <!--分享链接小图-->
+                <tr>
+                    <td style="vertical-align:middle;">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 分享链接小图：</span>
+                    </td>
+                    <td class="alignleft">
+                        <input type="hidden" id="cover_url4" name="cover_url4"
+                               value="<?php echo $data[3]['cover_url']?$data[3]['cover_url']:"" ?>"/>
+                        <img
+                                id="cover_show4" <?php if ($data[3]['cover_url']) echo "style='width: 100px;height: 100px;'"; ?>
+                                src="<?php echo $data[3]['cover_url']?$data[3]['cover_url']:"" ?>">
+                        <a class="but1" onclick="return dialog_frame(this,450,580,false)"
+                           href="<?php echo $this->createUrl('material/addMaterialPics'); ?>?add_type=3&&num=4">选择素材库图片</a>
+                    </td>
+                </tr>
+                <!--浏览器Title-->
+                <tr>
+                    <td style="vertical-align:middle;width: 110px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 浏览器Title：</span>
+                    </td>
+                    <td>
+                        <input style="font-size: small;width: 300px" type="text" class="ipt" id="tag_4" name="tag_4"
+                               value="<?php echo $data[3]['tag'] ? $data[3]['tag'] : ""; ?>"/>
+                    </td>
+                </tr>
+                <!--   跳转链接-->
+                <tr>
+                    <td style="vertical-align:middle;width: 110px">
+                        <span style="vertical-align:middle;color: dimgrey;font-weight:bold"> 跳转链接：</span>
+                    </td>
+                    <td>
+                        <input style="font-size: small;width: 300px" type="text" class="ipt" id="link3" name="link3"
+                               value="<?php echo $data[3]['link'] ? $data[3]['link'] : ""; ?>"/>
+                    </td>
+                </tr>
+                <!--保存-->
+                <tr>
+                    <td></td>
+                    <td class="alignleft">
+                        <input style="font-size: medium" type="submit" class="but"  value="保存"/>&nbsp;&nbsp;&nbsp;
+                        <?php $this->check_u_menu(array('code' => '<input value="另存为" style="font-size: medium" type="button" class="but" onclick="return save_as(this,300,150,false)" href="' . $this->createUrl('material/saveAs') . '"/>', 'auth_tag' => 'material_saveAs')); ?>
+                        &nbsp;&nbsp;&nbsp;
+                        <input style="font-size: medium" type="button" class="but" value="返回"
+                               onclick="window.location='<?php echo $this->get('url') ? $this->get('url') : $this->createUrl('material/index'); ?>'"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+<?php } ?>
+<script type="text/javascript">
+    //分板块
+    function touchNav(num) {
+        for (var i = 1; i < 5; i++) {
+            document.getElementById('turnPage_' + i).style.display = 'none';
+            document.getElementById('Page_' + i).className ='';
+        }
+        document.getElementById('turnPage_' + num).style.display = 'block';
+        document.getElementById('Page_' + num).className ='current';
+    }
+
+    $('.vote_page').on('keyup focus', function () {
+        $('.searchsBox').show();
+        var myInput = $(this);
+        var key = myInput.val();
+        var postdata = {search_type: 'keys', search_txt: key};
+        $.getJSON('<?php echo $this->createUrl('material/getVotePage') ?>?jsoncallback=?', postdata, function (reponse) {
+            try {
+                if (reponse.state < 1) {
+                    alert(reponse.msg);
+                    return false;
+                }
+                var html = '';
+                console.log(reponse);
+                for (var i = 0; i < reponse.data.list.length; i++) {
+                    html += '<a href="javascript:void(0);" data-id="' + reponse.data.list[i].id + '" ' +
+                        'data-votePage="' + reponse.data.list[i].vote_page + '"  ' +
+                        'onmouseDown="getTipsValues(this);"   style="display:block;font-size:12px;padding:2px 5px;">' + reponse.data.list[i].vote_page + '</a>';
+                }
+                var s_height = myInput.height();
+                var top = myInput.offset().top + s_height;
+                var left = myInput.offset().left;
+                var width = myInput.width();
+                $('.searchsBox').remove();
+                $('body').append('<div class="searchsBox" style="position:absolute;top:' + top + 'px;left:' + left + 'px;background:#fff;z-index:2;border:1px solid #ccc;width:' + width + 'px;">' + html + '</div>');
+            } catch (e) {
+                alert(e.message)
+            }
+        });
+        myInput.blur(function () {
+            $('.searchsBox').hide();
+        })
+    });
+
+    function getTipsValues(ele) {
+        var myobj = $(ele);
+        var id = myobj.attr('data-id');
+        var vote_page = myobj.attr('data-votePage');
+        $('.vote_id').val(id);
+        $('.vote_page').val(vote_page);
+    }
+
+    $('.review_title').on('keyup focus', function () {
+        $('.searchsBox').show();
+        var myInput = $(this);
+        var key = myInput.val();
+        var postdata = {search_type: 'keys', search_txt: key};
+        $.getJSON('<?php echo $this->createUrl('material/getReviewList') ?>?jsoncallback=?', postdata, function (reponse) {
+            try {
+                if (reponse.state < 1) {
+                    alert(reponse.msg);
+                    return false;
+                }
+                var html = '';
+                console.log(reponse);
+                for (var i = 0; i < reponse.data.list.length; i++) {
+                    html += '<a href="javascript:void(0);" data-id="' + reponse.data.list[i].id + '" ' +
+                        'data-reviewName="' + reponse.data.list[i].review_title + '"  ' +
+                        'onmouseDown="getTipsValue(this);"   style="display:block;font-size:12px;padding:2px 5px;">' + reponse.data.list[i].review_title + '(' + reponse.data.list[i].reviewType + ')</a>';
+                }
+                var s_height = myInput.height();
+                var top = myInput.offset().top + s_height;
+                var left = myInput.offset().left;
+                var width = myInput.width();
+                $('.searchsBox').remove();
+                $('body').append('<div class="searchsBox" style="position:absolute;top:' + top + 'px;left:' + left + 'px;background:#fff;z-index:2;border:1px solid #ccc;width:' + width + 'px;">' + html + '</div>');
+            } catch (e) {
+                alert(e.message)
+            }
+        });
+        myInput.blur(function () {
+            $('.searchsBox').hide();
+        })
+    });
+
+    function getTipsValue(ele) {
+        var myobj = $(ele);
+        var id = myobj.attr('data-id');
+        var review_title = myobj.attr('data-reviewName');
+        $('.review_id').val(id);
+        $('.review_title').val(review_title);
+    }
+
+    $('.order_title').on('keyup focus', function () {
+        $('.searchsBox').show();
+        var myInput = $(this);
+        var key = myInput.val();
+        var postdata = {search_type: 'keys', search_txt: key};
+        console.log(postdata);
+        $.getJSON('<?php echo $this->createUrl('orderTemplete/getOrderTempletes') ?>?jsoncallback=?', postdata, function (reponse) {
+            try {
+                if (reponse.state < 1) {
+                    alert(reponse.msg);
+                    return false;
+                }
+                var html = '';
+                console.log(reponse);
+                for (var i = 0; i < reponse.data.list.length; i++) {
+                    html += '<a href="javascript:void(0);" data-id="' + reponse.data.list[i].id + '" ' +
+                        'data-orderTitle="' + reponse.data.list[i].order_title + '"  ' +
+                        'onmouseDown="getOrderValue(this);"   style="display:block;font-size:12px;padding:2px 5px;">' + reponse.data.list[i].order_title + '</a>';
+                }
+                var s_height = myInput.height();
+                var top = myInput.offset().top + s_height;
+                var left = myInput.offset().left;
+                var width = myInput.width();
+                $('.searchsBox').remove();
+                $('body').append('<div class="searchsBox" style="position:absolute;top:' + top + 'px;left:' + left + 'px;background:#fff;z-index:2;border:1px solid #ccc;width:' + width + 'px;">' + html + '</div>');
+            } catch (e) {
+                alert(e.message)
+            }
+        });
+        myInput.blur(function () {
+            $('.searchsBox').hide();
+        })
+    });
+
+    function getOrderValue(ele) {
+        var myobj = $(ele);
+        var id = myobj.attr('data-id');
+        var order_title = myobj.attr('data-orderTitle');
+        $('.order_id').val(id);
+        $('.order_title').val(order_title);
+    }
+
+    //插入领取人数字样
+    function addText(text,num) {
+        if(num) $("#info_body"+ num).xheditor().pasteHTML(text);
+        else $("#info_body").xheditor().pasteHTML(text);
+    }
+    //添加素材库图片交互
+    function addImg(url, is_jump ,num) {
+        if (is_jump == 1) {
+            var html = "<p><img class='lazy img2wx jump' src='" + url + "'  _xhe_src='" + url + "' /></p>";
+        } else {
+            var html = "<p><img class='lazy' src='" + url + "'  _xhe_src='" + url + "' /></p>";
+        }
+        if(num) $("#info_body"+ num).xheditor().pasteHTML(html);
+        else $("#info_body").xheditor().pasteHTML(html);
+    }
+
+    //插入素材库视频
+    function addOneVideo(url,num) {
+        var html = "<p  style='margin:5%;text-align: center;'><video style='max-width: 90%' src='" + url + "' _xhe_src='" + url + "' controls></p><br/>";
+        if(num) $("#info_body"+ num).xheditor().pasteHTML(html);
+        else $("#info_body").xheditor().pasteHTML(html);
+    }
+
+    function addSth(value) {
+        if (value == 0) {
+            $(".sth").hide();
+        } else if (value == 1) {
+            $(".sth").show();
+        }
+    }
+
+    function addOrder(value) {
+        if (value == 0) {
+            $(".order").hide();
+        } else if (value == 1) {
+            $(".order").show();
+        }
+    }
+
+    //添加一张图片 顶部背景图和头像
+    function addOneImg(url, type,num) {
+        if (type == 1) {
+            var obj = $("#top_img");
+            $("#top_show").attr('src', url);
+            $("#top_show").css({width: 160, height: 50})
+        } else if (type == 2) {
+            var obj = $("#avater_img");
+            $("#avater_show").attr('src', url);
+            $("#avater_show").css({width: 80, height: 80})
+        } else if (type == 3) {
+            if(num){
+            var obj = $("#cover_url"+num);
+            $("#cover_show"+num).attr('src', url);
+            $("#cover_show"+num).css({width: 80, height: 80})
+            }else{
+                var obj = $("#cover_url");
+                $("#cover_show").attr('src', url);
+                $("#cover_show").css({width: 80, height: 80})
+            }
+        }
+        $(obj).val(url);
+    }
+
+    //      添加微信号标识
+    function addWeChatSign(num) {
+        var html = "<span>{{weixin}}</span>";
+        if(num) $("#info_body"+ num).xheditor().pasteHTML(html);
+        if(num == null) $("#info_body").xheditor().pasteHTML(html);
+    }
+
+    //添加微信号图片标识
+    function addWeChatImg(num) {
+        var html = "<span>{{weixin_img}}</span>";
+        if(num) $("#info_body"+ num).xheditor().pasteHTML(html);
+        else $("#info_body").xheditor().pasteHTML(html);
+    }
+
+    //添加形象标识
+    function addXingXiangSign(num) {
+        var html = "<span>{{xingxiang}}</span>";
+        if(num) $("#info_body"+ num).xheditor().pasteHTML(html);
+        else $("#info_body").xheditor().pasteHTML(html);
+    }
+    //插入问卷
+    function addQuestionSign() {
+        var html = "{{question}}";
+        $("#info_body").xheditor().pasteHTML(html);
+    }
+
+    //切换底部类型
+    function changebottom(value) {
+        if (value == 0) {
+            $(".bottom_1").show();
+            $(".bottom_2").hide();
+        } else if (value == 1) {
+            $(".bottom_1").show();
+            $(".bottom_2").show();
+        } else if (value == 3) {
+            $(".bottom_1").show();
+            $(".bottom_2").hide();
+        }else if (value == 4) {
+            $(".bottom_1").show();
+            $(".bottom_2").hide();
+        }else {
+            $(".bottom_1").hide();
+            $(".bottom_2").hide();
+        }
+    }
+
+    window.onload = function () {
+        var radio = document.getElementsByName("bottom_type");
+            for (i = 0; i < radio.length; i++) {
+                if (radio[i].checked) {
+                    val = radio[i].value;
+                }
+            }
+
+            if (val == 0) {
+                $(".bottom_1").show();
+                $(".bottom_2").hide();
+            } else if (val == 1) {
+                $(".bottom_1").show();
+                $(".bottom_2").show();
+            } else if (val == 3) {
+                $(".bottom_1").show();
+                $(".bottom_2").hide();
+            }else if (val == 4) {
+                $(".bottom_1").show();
+                $(".bottom_2").hide();
+            }else {
+                $(".bottom_1").hide();
+                $(".bottom_2").hide();
+            }
+
+    }
+
+    $("#release_date").click(function () {
+        $(" input[type:radio][name=release_date][value=3]").attr('checked',true);
+    })
+    $(" input[type:radio][name=release_date]").click(function () {
+        $("#release_date").attr('value','');
+    })
+</script>
+
+<style type="text/css">
+    .upbtn_box {
+        border: 1px solid #ccc;
+        background: #eee;
+        width: 80px;
+        height: 26px;
+        display: inline-block;
+    }
+
+    .upbtn_box input {
+        opacity: 0;
+        position: absolute;
+        right: 0;
+        width: 80px;
+        height: 26px;
+        float: right;
+        cursor: pointer;
+        top: 0;
+    }
+</style>
+<!--使用新版本的文件，解决日期选择框随页面拖动一起移动问题-->
+<script src="<?php echo Yii::app()->params['basic']['cssurl']; ?>lib/My97DatePicker/WdatePickerNew.js" ></script>

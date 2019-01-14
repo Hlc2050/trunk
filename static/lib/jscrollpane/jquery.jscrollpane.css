@@ -1,0 +1,41 @@
+/*
+ * CSS Styles that are needed by jScrollPane for it to operate correctly.
+ *
+ * Include this stylesheet in your site or copy and paste the styles below into your stylesheet - jScrollPane
+ * may not operate correctly without them.
+ */
+
+.jspContainer { overflow: hidden; position: relative; }
+.jspPane { position: absolute; }
+.jspVerticalBar { position: absolute; top: 0; right:0; width: 6px; height: 100%; }
+.jspCap { display: none; }
+.jspTrack {-webkit-border-radius: 3px/9px;
+	-moz-border-radius: 3px/9px;
+	border-radius: 3px/9px;
+	background-color: rgba(207,161,104,0);
+	-webkit-box-shadow: 1px 0 0 1px rgba(253,253,253,.46), inset 2px 0 1px rgba(69,47,18,.29), inset 0 0 3px rgba(113,81,37,.24);
+	-moz-box-shadow: 1px 0 0 1px rgba(253,253,253,.46), inset 2px 0 1px rgba(69,47,18,.29), inset 0 0 3px rgba(113,81,37,.24);
+	box-shadow: 1px 0 0 1px rgba(253,253,253,.46), inset 2px 0 1px rgba(69,47,18,.29), inset 0 0 3px rgba(113,81,37,.24);
+	border: solid 1px rgba(255,255,255,.16); position: relative; }
+.jspDrag {/*-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	background-color: #d4d3d3;
+	-webkit-box-shadow: 3px 0 2px rgba(90,60,18,.22), inset 1px 0 #fff, inset 0 0 5px rgba(2,2,2,.13);
+	-moz-box-shadow: 3px 0 2px rgba(90,60,18,.22), inset 1px 0 #fff, inset 0 0 5px rgba(2,2,2,.13);
+	box-shadow: 3px 0 2px rgba(90,60,18,.22), inset 1px 0 #fff, inset 0 0 5px rgba(2,2,2,.13);
+	border: solid 1px rgba(129,129,129,.59);
+	background-image: -webkit-linear-gradient(bottom, rgba(207,206,206,.97), rgba(219,218,218,.97));
+	background-image: -moz-linear-gradient(bottom, rgba(207,206,206,.97), rgba(219,218,218,.97));
+	background-image: -o-linear-gradient(bottom, rgba(207,206,206,.97), rgba(219,218,218,.97));
+	background-image: linear-gradient(to top, rgba(207,206,206,.97), rgba(219,218,218,.97)); */
+	background:url(hander.png) no-repeat;
+	position: relative; top: 0; left: -4px; width:11px; height:32px; cursor: pointer; }
+.jspArrow { background: #50506d; text-indent: -20000px; display: block; cursor: pointer; padding: 0; margin: 0; }
+.jspArrow.jspDisabled { cursor: default; background: #80808d; }
+.jspVerticalBar .jspArrow { height: 16px; }
+.jspVerticalBar .jspArrow:focus { outline: none; }
+.jspCorner { background: #eeeef4; float: left; height: 100%; }
+/* Yuk! CSS Hack for IE6 3 pixel bug :( */
+* html .jspCorner { margin: 0 -3px 0 0; }
+.jspHorizontalBar {display:none;}
