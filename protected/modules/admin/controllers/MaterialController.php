@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * 素材管理控制器
+ */
 class MaterialController extends AdminController
 {
 
@@ -533,8 +536,6 @@ class MaterialController extends AdminController
             }
         }
     }
-
-//
 
     /**
      * 修改图文
@@ -1610,13 +1611,17 @@ class MaterialController extends AdminController
             $this->render('addReview', array('page' => $page));
             exit;
         }
+        $avatar_id = $this->get('avatar_id');
+
         $info = new MaterialReview();
         $info->review_title = $this->post('review_title');
         $info->review_type = $this->post('review_type');
         $info->support_staff_id = $this->post('support_staff_id');
+        $info->avatar_id = $avatar_id;
         if ($info->review_title == '') $this->msg(array('state' => 0, 'msgwords' => '未填写评论标题'));
         if ($info->review_type == '') $this->msg(array('state' => 0, 'msgwords' => '未选择评论类型'));
         if ($info->support_staff_id == '') $this->msg(array('state' => 0, 'msgwords' => '未选择支持人员'));
+        if ($avatar_id == '') $this->msg(array('state' => 0, 'msgwords' => '未选择头像素材库'));
         for ($i = 0; $i <= 7; $i++) {
             if (isset($this->post('review_name')[$i])) {
                 if ($this->post('review_name')[$i] == '') $this->msg(array('state' => 0, 'msgwords' => '未填写评论名称'));
@@ -1634,13 +1639,20 @@ class MaterialController extends AdminController
         } else {
             //新增和修改之后的动作
             //将评论存入题库
-            foreach ($this->post('review_name') as $k => $v) {
+            $review_name = $this->get('review_name');
+            $nameNum = count($review_name);
+
+            $sql = "SELECT resource_url FROM material_pic_relation  as a LEFT JOIN resource_list as b on img_id=resource_id WHERE group_id= ".$avatar_id." ORDER BY rand() LIMIT $nameNum";
+            $avatarArr = Yii::app()->db->createCommand($sql)->queryAll();
+
+            foreach ($review_name as $k => $v) {
                 $data = new MaterialReviewDetail();
                 $data->review_id = $id;
                 $data->review_name = $v;
                 if ($data->review_name == '') continue;
                 $data->review_content = $this->post('review_content')[$k];
                 $data->review_date = $this->post('review_date')[$k];
+                $data->avatar_url = $avatarArr[$k]['resource_url'];
                 $data->create_date = time();
                 $data->save();
                 $logs_quest = "添加了新的评论库：" . $data->review_name;
@@ -1651,7 +1663,6 @@ class MaterialController extends AdminController
             $this->msg($msgarr);
         }
     }
-
 
     /**
      * 修改评论
@@ -1671,12 +1682,16 @@ class MaterialController extends AdminController
             $this->render('updateReview', array('page' => $page, 'data' => $data));
             exit;
         }
+        $avatar_id = $this->get('avatar_id');
+
         $info->review_title = $this->post('review_title');
         $info->review_type = $this->post('review_type');
         $info->support_staff_id = $this->post('support_staff_id');
+        $info->avatar_id = $avatar_id;
         if ($info->review_title == '') $this->msg(array('state' => 0, 'msgwords' => '未填写评论标题'));
         if ($info->review_type == '') $this->msg(array('state' => 0, 'msgwords' => '未选择评论类型'));
         if ($info->support_staff_id == '') $this->msg(array('state' => 0, 'msgwords' => '未选择支持人员'));
+        if ($avatar_id == '') $this->msg(array('state' => 0, 'msgwords' => '未选择头像素材库'));
         for ($i = 0; $i <= 7; $i++) {
             if (isset($this->post('review_name')[$i])) {
                 if ($this->post('review_name')[$i] == '') $this->msg(array('state' => 0, 'msgwords' => '未填写评论名称'));
@@ -1693,6 +1708,12 @@ class MaterialController extends AdminController
         } else {
             //新增和修改之后的动作
             //将评论存入题库
+            $review_name = $this->get('review_name');
+            $nameNum = count($review_name);
+
+            $sql = "SELECT resource_url FROM material_pic_relation  as a LEFT JOIN resource_list as b on img_id=resource_id WHERE group_id= ".$avatar_id." ORDER BY rand() LIMIT $nameNum";
+            $avatarArr = Yii::app()->db->createCommand($sql)->queryAll();
+
             foreach ($this->post('review_name') as $k => $v) {
                 $data = MaterialReviewDetail::model()->findByPk($this->post('r_id')[$k]);
                 if (!$data) {
@@ -1703,6 +1724,7 @@ class MaterialController extends AdminController
                 $data->review_name = $v;
                 if ($data->review_name == '') continue;
                 $data->review_content = $this->post('review_content')[$k];
+                $data->avatar_url = $avatarArr[$k]['resource_url'];
                 $data->review_date = $this->post('review_date')[$k];
                 $data->update_date = time();
                 $data->save();
@@ -1714,7 +1736,6 @@ class MaterialController extends AdminController
             $this->msg($msgarr);
         }
     }
-
 
     /**
      * 删除评论

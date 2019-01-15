@@ -5,7 +5,6 @@
  * Date: 2017/12/2
  * Time: 10:46
  */
-
 class FansInputPredictController extends AdminController
 {
 

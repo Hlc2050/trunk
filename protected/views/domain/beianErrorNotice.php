@@ -185,13 +185,25 @@
             <span class="name">备注：</span>
             <?php echo $r['mark']; ?>
         </li>
-        <li <?php if($r['domain_type']==0 || $r['promotion_id']==0){?> style="border-bottom: 1px solid #e7e7eb;" <?php }?>>
+        <li>
             <span class="name">新链接：</span>
             <?php if ($r['promotion_id'] == 0) {
                 echo '-'; ?>
             <?php } else { ?>
                 <a class="new_url" href="<?php echo $href; ?>"><?php echo $href; ?></a>
             <?php } ?>
+        </li>
+        <li>
+            <span class="name">总替换域名个数：</span>
+            <?php echo $r['all_num']; ?>
+        </li>
+        <li>
+            <span class="name">今日替换域名个数：</span>
+            <?php echo $r['today_num']; ?>
+        </li>
+        <li <?php if($r['domain_type']==0 || $r['promotion_id']==0){?> style="border-bottom: 1px solid #e7e7eb;" <?php }?>>
+            <span class="name">掉备案域名个数：</span>
+            <?php echo $r['detection']; ?>
         </li>
         <?php  if($user_id == $sno && $r['domain_type']!=0 && $r['promotion_id']!=0) { ?>
             <li style="border-bottom: 1px solid #e7e7eb;">

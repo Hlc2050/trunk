@@ -61,48 +61,49 @@ class DomainController extends CController
             $page['finance_sno'] = $finance_sno;
             $page['user_id'] = $_GET['user_id'] ? $_GET['user_id'] : 0;
 
+            //总、今日替换个数，掉备案域名个数
+            $temp = array();
+            $now = time();
+            $today_begin = strtotime(date('Y-m-d 00:00:00', $now));
+            $tomorrow = strtotime(date('Y-m-d 00:00:00', strtotime('+1 day')));
+            $sql = 'select * from domain_intercept_detail 
+                where promotion_id !=0 order by promotion_id';
+            $table_list = Yii::app()->db->createCommand($sql)->queryAll();
+
+            foreach ($table_list as $value) {
+                $key = $value['promotion_id'];
+
+                if (strstr($value['mark'], '成功')) {
+                    //总替换域名个数
+                    if ($value['detection_type'] == 0) {
+                        $temp[$key]['all_num'] += 1;
+                    } else {
+                        $temp[$key]['all_num'] += 0;
+                    }
+                    //今日替换域名个数
+                    if ($today_begin < $value['time'] && $value['time'] < $tomorrow && $value['detection_type'] == 0) {
+                        $temp[$key]['today_num'] += 1;
+                    } else {
+                        $temp[$key]['today_num'] += 0;
+                    }
+                }
+                //掉备案域名
+                if ($value['detection_type'] == 1) {
+                    $temp[$key]['detection'] += 1;
+                } else {
+                    $temp[$key]['detection'] += 0;
+                }
+            }
+
+            foreach ($page['domains'] as $key => $value) {
+                if (isset($temp[$value['promotion_id']])) {
+                    $page['domains'][$key] = array_merge($page['domains'][$key], $temp[$value['promotion_id']]);
+                }
+            }
+
             if ($type == 1)
                 $this->render('beianErrorNotice', array('page' => $page));
             else {
-                $temp = array();
-                $now = time();
-                $today_begin = strtotime(date('Y-m-d 00:00:00', $now));
-                $tomorrow = strtotime(date('Y-m-d 00:00:00', strtotime('+1 day')));
-                $sql = 'select * from domain_intercept_detail 
-                where promotion_id !=0 order by promotion_id';
-                $table_list = Yii::app()->db->createCommand($sql)->queryAll();
-
-                foreach ($table_list as $value) {
-                    $key = $value['promotion_id'];
-
-                    if (strstr($value['mark'], '成功')) {
-                        //总替换域名个数
-                        if ($value['detection_type'] == 0) {
-                            $temp[$key]['all_num'] += 1;
-                        } else {
-                            $temp[$key]['all_num'] += 0;
-                        }
-                        //今日替换域名个数
-                        if ($today_begin < $value['time'] && $value['time'] < $tomorrow && $value['detection_type'] == 0) {
-                            $temp[$key]['today_num'] += 1;
-                        } else {
-                            $temp[$key]['today_num'] += 0;
-                        }
-                    }
-                    //掉备案域名
-                    if ($value['detection_type'] == 1) {
-                        $temp[$key]['detection'] += 1;
-                    } else {
-                        $temp[$key]['detection'] += 0;
-                    }
-                }
-
-                foreach ($page['domains'] as $key => $value) {
-                    if (isset($temp[$value['promotion_id']])) {
-                        $page['domains'][$key] = array_merge($page['domains'][$key], $temp[$value['promotion_id']]);
-                    }
-                }
-
                 $this->render('interceptNotice', array('page' => $page));
             }
         } else {

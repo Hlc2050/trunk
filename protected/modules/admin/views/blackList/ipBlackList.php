@@ -3,7 +3,7 @@
 <div class="main mhead">
 <div class="mt10 clearfix">
     <div class="l">
-        <input class="but2" value="删除选中" onclick="set_some('<?php echo $this->createUrl('blackList/deleteSelectIp'); ?>?id=[@]','确定删除吗？');"/>&nbsp;&nbsp;
+        <input class="but" value="删除选中" onclick="set_some('<?php echo $this->createUrl('blackList/deleteSelectIp'); ?>?id=[@]','确定删除吗？');"/>&nbsp;&nbsp;
         <a class="but2" href="<?php echo $this->createUrl('blackList/downloadIpTemplate'); ?>">模板下载</a>&nbsp;&nbsp;&nbsp;
     </div>
     <form action="<?php echo $this->createUrl('blackList/leadIpExcel') ?>" method="post" enctype="multipart/form-data">

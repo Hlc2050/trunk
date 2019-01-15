@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 素材评论管理表
  * User: fang
  * Date: 2017/3/23
  * Time: 10:12

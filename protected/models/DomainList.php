@@ -147,7 +147,18 @@ class DomainList extends CActiveRecord{
         }
         //修改为备用时，判断是否需要仅修改正常状态域名
         if ($new_status === 0 && $check_status == 1) {
+            $condition2 = $condition.' and status!=1 ';
             $condition .= ' and status=1 ';
+            //修改非备用域名除域名状态外的其他数据
+            $no_status_data = array();
+            foreach ($data as $key=>$value) {
+                if ($key!='status') {
+                    $no_status_data[$key] = $value;
+                }
+            }
+            if ($no_status_data) {
+                $this->updateAll($no_status_data,$condition2);
+            }
         }
         $this->updateAll($data,$condition);
     }

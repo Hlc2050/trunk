@@ -31,6 +31,7 @@
     <form method="post"
           action="<?php echo $this->createUrl($page['info']['id'] ? 'material/editReview' : 'material/addReview'); ?>?p=<?php echo $_GET['p']; ?>">
         <input type="hidden" id="id" name="id" value="<?php echo $page['info']['id']; ?>"/>
+
         <table class="tb3" id="questionnaire">
             <tbody>
             <tr>
@@ -65,6 +66,22 @@
                     );
                     ?>
                     <span style="color: red">*必填</span>
+                </td>
+            </tr>
+            <tr>
+                <td>头像素材库：
+                    <select name="avatar_id">
+                        <option value="" <?php echo $page['info']['avatar_id'] == '' ? 'selected' : ''; ?>>
+                        </option>
+                        <?php
+                        $picGroupList = $this->toArr(MaterialPicGroup::model()->findAll());
+                        foreach ($picGroupList as $key => $val) { ?>
+                            <option value="<?php echo $val['id']; ?>" <?php echo $page['info']['avatar_id'] == $val['id'] ? 'selected' : ''; ?>>
+                                <?php echo $val['group_name']; ?>
+                            </option>
+                        <?php } ?>
+                    </select>&nbsp;&nbsp;
+                    <span style="color: red">*必选</span>
                 </td>
             </tr>
             <tr>

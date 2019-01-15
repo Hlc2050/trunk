@@ -1,12 +1,10 @@
 <?php
-//支持人员权限表
 /**
- * Created by PhpStorm.
+ * 支持人员权限表
  * User: hlc
  * Date: 2018/11/14
  * Time: 10:09
  */
-
 class SupporterAuController extends AdminController
 {
 
@@ -21,7 +19,6 @@ class SupporterAuController extends AdminController
     /**
      * 支持人员权限添加
      */
-
     public function actionAdd(){
         $arr  = explode('/,',$_GET['data']);
         $promotion_user_id = array();
@@ -55,26 +52,44 @@ class SupporterAuController extends AdminController
     /**
      * ajax获取select2数据
      */
-
     public function actionGetData(){
-        $result = PromotionUserRelation::model()->findAll('user_id='.$_POST['supportStaff']);
-        $promotionStaffArr = $this->getPromotionStaff();
-        $temp = array();
-        foreach ($result as $key=>$value){
-            $temp[$key]['id'] = $value['promotion_user_id'];
-            $temp[$key]['text'] = $promotionStaffArr[$value['promotion_user_id']];
+        $relation = array();
+
+        $str = explode(',',$this->get('string'));
+        $promotionUserRelation = PromotionUserRelation::model()->findAll();
+
+        foreach ($promotionUserRelation as $value){
+            $relation[$value['user_id']][] = $value['promotion_user_id'];
         }
-          echo json_encode($temp);
+
+        array_key_exists('',$promotionUserRelation);
+        $promotionUserRelation = $this->changeType($promotionUserRelation,'user_id','promotion_user_id');
+
+        my_print($relation);
+//        $result = PromotionUserRelation::model()->findAll('user_id ='.$this->get('string').')');
+//        $promotionStaffArr = $this->getPromotionStaff();
+//        $data = $temp = array();
+//        foreach ($result as $key=>$value){
+//            $temp['id'] = $value['promotion_user_id'];
+//            $temp['text'] = $promotionStaffArr[$value['promotion_user_id']];
+//            $data[] = $temp;
+//        }
+//
+//          echo json_encode($data);
     }
 
-    //获取推广人员数据
+    /**
+     * 获取推广人员数据
+     */
     function getPromotionStaff(){
         $promotionStaffArr = PromotionStaff::model()->getPromotionStaffList(1);
         $promotionStaffArr = $this->changeType($promotionStaffArr,'user_id','name');
         return $promotionStaffArr;
     }
 
-    //修改数据格式 $str1 =$key $str2=$value
+    /**
+     * 修改数据格式 $str1 =$key $str2=$value
+     */
     function changeType($array = array(),$str1 = '',$str2 = ''){
         $temp = array();
         foreach ($array as $value){

@@ -247,7 +247,6 @@ class DeliveryIndepOrderController extends AdminController
 
     }
 
-
     /**
      * 导出
      */
@@ -283,6 +282,7 @@ class DeliveryIndepOrderController extends AdminController
         helper::downloadCsv($headlist, $row, $file_name);
 
     }
+
     private function getExportData($is_export=0)
     {
         $params['where'] = '';

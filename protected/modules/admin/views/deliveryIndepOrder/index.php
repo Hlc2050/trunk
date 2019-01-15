@@ -92,9 +92,15 @@
                 <th>-</th>
             </tr>
             </thead>
+            <?php $del = $this->check_u_menu(array('auth_tag' => 'deliveryIndepOrder_del'));
+                  $edit = $this->check_u_menu(array('auth_tag' => 'deliveryIndepOrder_del'));
+            ?>
             <?php foreach ($page['listdata']['list'] as $key => $val) { ?>
                 <tr>
-                    <td><?php $this->check_u_menu(array('code' => '<input type="checkbox" class="cklist" value="' . $val['id'] . '"/>', 'auth_tag' => 'deliveryIndepOrder_del')); ?></td>
+                    <td><?php if ($del) { ?>
+                            <input type="checkbox" class="cklist" value="<?php echo $val['id']; ?>"/>
+                        <?php }; ?>
+                    </td>
                     <td><?php echo $val['id']; ?></td>
                     <td><?php echo date('Y-m-d', $val['delivery_date']); ?></td>
                     <td><?php echo $val['wechat_id']; ?></td>
@@ -105,7 +111,10 @@
                     <td><?php echo $page['listdata']['userNames'][$val['tg_uid']] ?></td>
                     <td><?php echo $val['delivery_count']; ?></td>
                     <td><?php echo $val['delivery_money']; ?></td>
-                    <td><?php $this->check_u_menu(array('code' => '<a href="' . $this->createUrl('deliveryIndepOrder/edit').'?id='.$val['id'].'&url='.$page['listdata']['url'].'">编辑</a>', 'auth_tag' => 'deliveryIndepOrder_edit')); ?></td>
+                    <td><?php if ($edit) { ?>
+                            <a href="<?php echo $this->createUrl('deliveryIndepOrder/edit').'?id='.$val['id'].'&url='.$page['listdata']['url']; ?>">编辑</a>
+                        <?php }; ?>
+                    </td>
                 </tr>
             <?php } ?>
         </table>
