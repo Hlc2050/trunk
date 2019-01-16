@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 微信号打卡控制器
  * User: fang
  * Date: 2016/12/30
  * Time: 16:27
@@ -27,8 +27,9 @@ class WechatCardController extends AdminController{
         $page['listdata'] = Dtable::model(WeChat::model()->tableName())->listdata($params);
         $this->render('index', array('page' => $page));
     }
-    /*
-     *获取对应时间段内的数据
+
+    /**
+     * 获取对应时间段内的数据
      */
     public function getTimeData($start,$end){
         if($this->get('csid')) $condition = " AND customer_service_id={$this->get('csid')}";

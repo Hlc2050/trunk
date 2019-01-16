@@ -118,19 +118,23 @@
                 <th>操作</th>
             </tr>
             </thead>
-            <?php
-            foreach ($page['listdata']['list'] as $val) {
-                //判断商品在不在客服部中，如果不在则提示
-                $goodsInfo = CustomerServiceRelation::model()->find('cs_id=:cs_id and goods_id=:goods_id', array(':cs_id' => $val['customer_service_id'], ':goods_id' => $val['goods_id']));
-                ?>
+            <?php $check_del = $this->check_u_menu(array('auth_tag' => 'weChat_del'));
+                  $edit_record = $this->check_u_menu(array('auth_tag' => 'weChatChangeLog_index'));
+                  $edit = $this->check_u_menu(array('auth_tag' => 'weChat_edit'));
+                  $del = $this->check_u_menu(array('auth_tag' => 'weChat_delete'));
+            ?>
+            <?php foreach ($page['listdata']['list'] as $val) { ?>
                 <tr>
-                    <td><?php $this->check_u_menu(array('code' => '<input type="checkbox" class="cklist" value="' . $val['id'] . '"/>', 'auth_tag' => 'weChat_del')); ?></td>
+                    <td><?php if ($check_del) { ?>
+                            <input type="checkbox" class="cklist" value="<?php echo $val['id'] ; ?>"/>
+                        <?php }; ?>
+                    </td>
                     <td><?php echo $val['wechat_id']; ?></td>
                     <td><?php echo $val['customer_service']; ?></td>
-                    <td><?php if (!$goodsInfo) echo '<s title="客服部找不到该商品" style="color:red;">'; ?><?php echo $val['goods_name'];
-                        if (!$goodsInfo) echo '</s>'; ?></td>
-                    <td><?php if (!$goodsInfo) echo '<s title="客服部找不到该商品" style="color:red;">'; ?><?php echo $val['character_name'];
-                        if (!$goodsInfo) echo '</s>'; ?></td>
+                    <td><?php if ($val['goods_id'] == '') echo '<s title="客服部找不到该商品" style="color:red;">'; ?><?php echo $val['goods_name'];
+                        if ($val['goods_id'] == '') echo '</s>'; ?></td>
+                    <td><?php if ($val['goods_id'] == '') echo '<s title="客服部找不到该商品" style="color:red;">'; ?><?php echo $val['character_name'];
+                        if ($val['goods_id'] == '') echo '</s>'; ?></td>
                     <td><?php echo $val['business_type']; ?></td>
                     <td><?php echo $val['charging_type']; ?></td>
                     <td><?php echo $val['promotion_staff']; ?></td>
@@ -153,11 +157,15 @@
                     <td><?php echo $val['update_time']; ?></td>
                     <td><?php echo $val['status']; ?></td>
                     <td>
-                        <?php $this->check_u_menu(array('code' => '<a onclick="return dialog_frame(this,700,500)" href="' . $this->createUrl('weChatChangeLog/index', array('weixin_id' => $val['id'])) . '">修改记录</a>', 'auth_tag' => 'weChatChangeLog_index')); ?>
-                        <br/>
-                        <?php $this->check_u_menu(array('code' => '<a href="' . $this->createUrl('weChat/edit?id='.$val['id'].'&url='.$page['listdata']['url']) . '" target="_blank" class="edit_a">修改</a>', 'auth_tag' => 'weChat_edit')); ?>
-                        &nbsp;
-                        <?php $this->check_u_menu(array('code' => '<a href="' .$this->createUrl('weChat/delete?id='.$val['id'].'&url='.$page['listdata']['url']) . '"  onclick="return confirm(\'确认删除吗\')">删除</a>', 'auth_tag' => 'weChat_delete')); ?>
+                        <?php if ($del) { ?>
+                            <a onclick="return dialog_frame(this,700,500)" href="<?php echo $this->createUrl('weChatChangeLog/index', array('weixin_id' => $val['id'])); ?>">修改记录</a><br/>
+                        <?php }; ?>
+                        <?php if ($edit) { ?>
+                            <a href="<?php echo $this->createUrl('weChat/edit?id='.$val['id'].'&url='.$page['listdata']['url']); ?>" target="_blank" class="edit_a">修改</a>&nbsp;
+                        <?php }; ?>
+                        <?php if ($del) { ?>
+                            <a href="<?php echo $this->createUrl('weChat/delete?id='.$val['id'].'&url='.$page['listdata']['url']); ?>"  onclick="return confirm(\'确认删除吗\')">删除</a>
+                        <?php }; ?>
                     </td>
                 </tr>
             <?php } ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 渠道数据表控制器
  * User: fang
  * Date: 2017/1/9
  */
@@ -26,9 +26,10 @@ class ChannelDataController extends AdminController{
                             LEFT JOIN partner as c ON a.partner_id=c.id 
                             LEFT JOIN finance_pay as f ON f.id=a.finance_pay_id 
                             LEFT JOIN material_article_template as m ON m.id=a.material_article_id 
+                            LEFT JOIN business_types as n ON n.bid=a.business_type 
                             ";
         $params['order'] = "  order by id desc    ";
-        $params['select'] = " a.*,m.article_code,b.channel_name,b.channel_code,c.name,f.sno";
+        $params['select'] = " a.*,m.article_code,b.channel_name,b.channel_code,c.name,f.sno,f.pay_money,f.online_date,n.bname";
         $params['pagesize'] = Yii::app()->params['management']['pagesize'];
         $params['pagebar'] = 1;
         $params['smart_order'] = 1;
@@ -37,6 +38,10 @@ class ChannelDataController extends AdminController{
 
         $this->render('index',array('page'=>$page));
     }
+
+    /**
+     * 添加渠道数据
+     */
     public function actionAdd(){
         $page=array();
         $id=$this->get('id');
@@ -95,6 +100,10 @@ class ChannelDataController extends AdminController{
             $this->msg($msgarr);
         }
     }
+
+    /**
+     * 修改渠道数据
+     */
     public function actionEdit(){
         $page=array();
         $id=$this->get('id');
@@ -158,6 +167,10 @@ class ChannelDataController extends AdminController{
             $this->msg($msgarr);
         }
     }
+
+    /**
+     * 删除渠道数据
+     */
     public function actionDelete(){
         $ids=isset($_GET['ids'])&&$_GET['ids']!=''?$_GET['ids']:'';
         $ids=explode(',',$ids);
@@ -172,6 +185,7 @@ class ChannelDataController extends AdminController{
         $this->logs($logs);
         $this->msg(array('state'=>1,'url' => $this->get('url')));
     }
+
     /**
      * AJAX获取合作商对应渠道
      * author: yjh
@@ -192,8 +206,7 @@ class ChannelDataController extends AdminController{
      * AJAX获取合作商对应渠道
      * author: yjh
      */
-    public
-    function actionGetOnlineDate()
+    public function actionGetOnlineDate()
     {
         if ($this->post('channel_id')) {
             $data = InfancePay::model()->findAll('channel_id = :channel_id', array(':channel_id' => $this->post('channel_id')));
@@ -211,8 +224,7 @@ class ChannelDataController extends AdminController{
      * AJAX获取合作商对应渠道
      * author: yjh
      */
-    public
-    function actionGetOtherData()
+    public function actionGetOtherData()
     {
         if ($this->post('channel_id') && $this->post('onlineDate')) {
             $channelData = Channel::model()->findByPk($this->post('channel_id'));

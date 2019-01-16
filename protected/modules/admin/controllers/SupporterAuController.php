@@ -53,43 +53,26 @@ class SupporterAuController extends AdminController
      * ajax获取select2数据
      */
     public function actionGetData(){
-        $relation = array();
-
-        $str = explode(',',$this->get('string'));
-        $promotionUserRelation = PromotionUserRelation::model()->findAll();
-
-        foreach ($promotionUserRelation as $value){
-            $relation[$value['user_id']][] = $value['promotion_user_id'];
+        $result = PromotionUserRelation::model()->findAll();
+        $promotionStaffArr = $this->getPromotionStaff();
+        $temp = array();
+        foreach ($result as $key=>$value){
+            $temp[$value['user_id']][] = array(
+                'id'=>$value['promotion_user_id'],
+                'text'=>$promotionStaffArr[$value['promotion_user_id']],
+            );
         }
-
-        array_key_exists('',$promotionUserRelation);
-        $promotionUserRelation = $this->changeType($promotionUserRelation,'user_id','promotion_user_id');
-
-        my_print($relation);
-//        $result = PromotionUserRelation::model()->findAll('user_id ='.$this->get('string').')');
-//        $promotionStaffArr = $this->getPromotionStaff();
-//        $data = $temp = array();
-//        foreach ($result as $key=>$value){
-//            $temp['id'] = $value['promotion_user_id'];
-//            $temp['text'] = $promotionStaffArr[$value['promotion_user_id']];
-//            $data[] = $temp;
-//        }
-//
-//          echo json_encode($data);
+          echo json_encode($temp);
     }
 
-    /**
-     * 获取推广人员数据
-     */
+    //获取推广人员数据
     function getPromotionStaff(){
         $promotionStaffArr = PromotionStaff::model()->getPromotionStaffList(1);
         $promotionStaffArr = $this->changeType($promotionStaffArr,'user_id','name');
         return $promotionStaffArr;
     }
 
-    /**
-     * 修改数据格式 $str1 =$key $str2=$value
-     */
+    //修改数据格式 $str1 =$key $str2=$value
     function changeType($array = array(),$str1 = '',$str2 = ''){
         $temp = array();
         foreach ($array as $value){

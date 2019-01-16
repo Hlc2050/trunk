@@ -1,11 +1,10 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 微信号使用记录控制器
  * User: Administrator
  * Date: 2018/1/26
  * Time: 13:46
  */
-
 class WechatUseLogController extends AdminController
 {
     public function actionIndex()
@@ -17,18 +16,18 @@ class WechatUseLogController extends AdminController
     {
         //搜索
         $params['where'] = '';
-        //$params['where'] .= " and(status!=4) ";
+
         if ($this->get('wechat_id') != '') $params['where'] .= " and(a.wechat_id like '%" . $this->get('wechat_id') . "%') ";
         if ($this->get('dt_id') != '') $params['where'] .= " and(a.department_id = '" . $this->get('dt_id') . "') ";
         if ($this->get('csid') != '') $params['where'] .= " and(a.customer_service_id = '" . $this->get('csid') . "') ";
         if ($this->get('bs_id') != '') $params['where'] .= " and(a.business_type = " . $this->get('bs_id') . ") ";
-
         if ($this->get('charge_id') != '') $params['where'] .= " and(a.charging_type = " . $this->get('charge_id') . ") ";
         if ($this->get('goods_id') != '') $params['where'] .= " and(g.id = '" . $this->get('goods_id') . "') ";
         if ($this->get('character_id') != '') $params['where'] .= " and(l.linkage_id = '" . $this->get('character_id') . "') ";
         if ($this->get('promotion_staff_id') != '') $params['where'] .= " and(a.promotion_staff_id = '" . $this->get('promotion_staff_id') . "') ";
         if ($this->get('start_date') != '') $params['where'] .= " and(a.begin_time >= " . strtotime($this->get('start_date')) . ") ";
         if ($this->get('end_date') != '') $params['where'] .= " and(a.end_time <= " . strtotime($this->get('end_date')) . " and a.end_time != 0) ";
+
         $params['order'] = "  order by id desc    ";
         $params['pagesize'] =  Yii::app()->params['management']['pagesize'];
 

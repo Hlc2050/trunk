@@ -11,7 +11,7 @@
         </tr>
         <?php foreach ($supportStaff as $key=>$value){  ?>
             <tr>
-                <td><?php echo $value ?></td><input name="supportStaff"  value="<?php echo $key ?>">
+                <td><?php echo $value ?></td><input name="supportStaff" hidden value="<?php echo $key ?>">
             <td>
                 <select class="combox" id="tagId_<?php echo $key ?>" name="tagId" multiple>
                     <?php foreach ($promotionStaff as $key=>$value){  ?>
@@ -29,46 +29,27 @@
 <script src="/static/lib/js/select2.js"></script>
 <script type="text/javascript">
     window.onload = function () {
-        var str = '';
-        $('input[name=supportStaff]').each(function () {
-            str += $(this).val()+',';
-        })
-        str = str.substr(0,str.length-1)
         $.ajax({
             type: "POST",
             url: "/admin/supporterAu/getData",
-            data: {'string': str},
             dataType: "json",
             success: function (result) {
-                console.log(result)
-
-//                if (result) {
-//                    $("#tagId_" + supportStaff).each(function () {
-//                        for (i = 0; i < result.length; i++) {
-//                            $("#tagId_" + supportStaff).append(new Option(result[i].text, result[i].id, false, true));
-//                        }
-//                    })
-//                }
+                if(result){
+                    $('input[name=supportStaff]').each(function () {
+                        var supportStaff =$(this).val();
+                        $("#tagId_"+supportStaff).each(function () {
+                            var pro = result[supportStaff];
+                            console.log(pro);
+                            if (pro != undefined){
+                                for(i=0;i<pro.length;i++){
+                                    $("#tagId_"+supportStaff).append(new Option(pro[i].text,  pro[i].id, false, true));
+                                }
+                            }
+                        })
+                    })
+                }
             }
         })
-//        $('input[name=supportStaff]').each(function () {
-//            var supportStaff =$(this).val();
-//            $.ajax({
-//                type: "POST",
-//                url: "/admin/supporterAu/getData",
-//                data: {'supportStaff': supportStaff},
-//                dataType: "json",
-//                success: function (result) {
-//                    if(result){
-//                        $("#tagId_"+supportStaff).each(function () {
-//                            for(i=0;i<result.length;i++){
-//                                $("#tagId_"+supportStaff).append(new Option(result[i].text,  result[i].id, false, true));
-//                            }
-//                        })
-//                    }
-//                }
-//            })
-//        })
     }
 
     $(function(){

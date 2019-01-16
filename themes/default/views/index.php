@@ -121,6 +121,7 @@ if ($psq_flag == 1) {
 
                     if ($r_type_name == '女科') {
                         foreach ($reviewDetailList as $k => $v) { ?>
+                            <div class="user-img" style="float: left"><img src="<?php echo $v['avatar_url'] ?>"></div>
                             <div class="bigg_">
                                 <div class="ctn_box">
                                     <h3 class="name_"><?php echo $v['review_name'] ?></h3>
@@ -128,19 +129,22 @@ if ($psq_flag == 1) {
                                     <p><?php echo $v['review_content'] ?></p>
                                 </div>
                             </div>
-
                         <?php }
                     } elseif ($r_type_name == '男科') {
                         foreach ($reviewDetailList as $k => $v) { ?>
                             <div class="bigg_">
-                                <div class="man_box">
-                                    <h3><?php echo $v['review_name'] ?></h3>
-                                    <span><?php echo $k + 1; ?>楼</span>
-                                    <p><?php echo $v['review_content'] ?></p>
-                                </div>
-                                <div class="font_">
-                                    <span class="time_"><?php echo $v['review_date']; ?></span>
-                                    <a href="#"><span class="code_">回复</span></a>
+                                <div class="user-img" style="float: left"><img src="<?php echo $v['avatar_url'] ?>"></div>
+                                <div style="margin-left: 60px;">
+
+                                    <div class="man_box">
+                                        <h3><?php echo $v['review_name'] ?></h3>
+                                        <span><?php echo $k + 1; ?>楼</span>
+                                        <p><?php echo $v['review_content'] ?></p>
+                                    </div>
+                                    <div class="font_">
+                                        <span class="time_"><?php echo $v['review_date']; ?></span>
+                                        <a href="#"><span class="code_">回复</span></a>
+                                    </div>
                                 </div>
                             </div>
                         <?php }

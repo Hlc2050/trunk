@@ -88,95 +88,182 @@ class DomainListController extends AdminController
     {
         $page = array();
         $id = $this->get('id');
-        $from_domain = $this->get('from_domain');
+        $domain_ids = explode(',',$id);
+        //单个编辑
+        $online_domain = array();
+        $no_unuse_domain = array();
+        if (count($domain_ids) == 1) {
+            $info = DomainList::model()->findByPk($id);
+            $domain = $info->domain;
+        }else { //批量修改
+            $info = DomainList::model()->findAll(' id in ('.$id.')');
+            $domains = array();
+            foreach ($info as $value) {
+                if ($value['status'] == 1) {
+                    $online_domain[$value['id']] = $value;
+                }
+                if ($value['status'] !=0) {
+                    $no_unuse_domain[$value['id']] = $value;
+                }
+                $domains[] = $value['domain'];
+            }
+            $domain = implode(',',$domains);
+        }
 
-        $info = DomainList::model()->findByPk($id);
 
         //显示表单
         if (!$_POST) {
             $info = $this->toArr($info);
-            if (!$info) {
+            if (!$info){
                 $this->msg(array('state' => 0, 'msgwords' => '域名不存在'));
             }
+            if (count($domain_ids) > 1) {
+                if (count($info) < count($domain_ids)) {
+                    $exit_ids = array_column($info,'id');
+                    $unexit_ids = array_diff($domain_ids,$exit_ids);
+                    $unexit_ids = implode(',',$unexit_ids);
+                    $this->msg(array('state' => 0, 'msgwords' => '域名id('.$unexit_ids.')不存在'));
+                }
+            }
             $page['info'] = $info;
+            $page['info']['domain_ids'] = $id;
+            $page['info']['no_unuse_domain'] = 0;
+            if (count($domain_ids) >1){
+                $page['info']['domain'] = implode(',',array_column($info,'domain'));
+                $page['info']['online_domain'] = count($online_domain) >=1 ? count($online_domain):0;
+                $page['info']['no_unuse_domain'] = count($no_unuse_domain) >=1 ? count($no_unuse_domain):0;
+                $page['info']['multi_edit'] = 1;
+            }
             $this->render('update', array('page' => $page));
             exit();
         }
-        //处理需要的字段
-        $last_type = $info->domain_type;
-        $last_status = $info->status;
-        $last_cnzz_id = $info->cnzz_code_id;
-//        $last_is_https = $info->is_https;
-        $last_application_type = $info->application_type;
-        $last_uid = $info->uid;
-        $status = $this->get('domain_status')==''?1:$this->get('domain_status');
-        $id = $this->get('id');
-        $info->money = $this->get('money');
-        $info->cnzz_code_id = $this->get('cnzz_code_id');
-        $info->domain_type = $this->get('domain_type');
-        $info->is_https = $this->get('is_https');
-        $info->is_public_domain = $this->get('is_public_domain');
-        $info->application_type = $this->get('application_type');
-        $info->mark = $this->get('mark');
-
-        if ($info->money == '') {
-            $this->msg(array('state' => 0, 'msgwords' => '费用不能为空'));
-        }
-        if ($info->domain_type == '') {
-            $this->msg(array('state' => 0, 'msgwords' => '域名类型未选'));
-        }
-
-        if ($last_status == 0 && ($info->domain_type == 0 || $info->domain_type == 3)) {
-            if ($info->cnzz_code_id == '') {
-                $this->msg(array('state' => 0, 'msgwords' => '总统计组别未选'));
+        $dbresult = false;
+        //批量修改域名时验证
+        $domain_count = count($domain_ids);
+        if ($domain_count>1) { //批量修改域名
+            $online_count = count($online_domain);
+            $no_unuse_count = count($no_unuse_domain);
+            $update_data = array();
+            if ($this->get('money') != ''){
+                $update_data['money'] = $this->get('money');
             }
-        }
+            if (isset($_POST['is_https'])){
+                $update_data['is_https'] = $this->get('is_https');
+            }
+            if ($this->get('is_public_domain') != ''){
+                $update_data['is_public_domain'] = $this->get('is_public_domain');
+            }
+            if ($this->get('mark') != ''){
+                $update_data['mark'] = $this->get('mark');
+            }
+            if (isset($_POST['domain_type']) && $this->get('domain_type') !=''){
+                $update_data['domain_type'] = $this->get('domain_type');
+            }
+            if (isset($_POST['promotion_staff_id'])  && $this->get('promotion_staff_id') !=''){
+                $update_data['uid'] = $this->get('promotion_staff_id');
+            }
+            if (isset($_POST['cnzz_code_id'])  && $this->get('cnzz_code_id') !=''){
+                $update_data['cnzz_code_id'] = $this->get('cnzz_code_id');
+            }
+            if (isset($_POST['domain_status'])  && $this->get('domain_status') !=''){
+                $update_data['status'] = $this->get('domain_status');
+            }
+            if (isset($_POST['application_type'])  && $this->get('application_type') !=''){
+                $update_data['application_type'] = $this->get('application_type');
+            }
+            //上线状态域名不能修改状态
+            if ($online_count>=1) {
+                unset($update_data['status']);
+            }
+            //非备用域名不修改域名类型、推广人员、总统计组别、应用类型
+            if ($no_unuse_count>=1) {
+                unset($update_data['domain_type']);
+                unset($update_data['uid']);
+                unset($update_data['cnzz_code_id']);
+                unset($update_data['application_type']);
+            }
+            if (!$update_data) {
+                $this->msg(array('state' => 0, 'msgwords' => '未做任何修改！'));
+            }else {
+                $update_data['update_time'] = time();
+                $dbresult = DomainList::model()->updateDomains(explode(',',$id),$update_data,null);
+            }
+        }else {
+            //处理需要的字段
+            $last_type = $info->domain_type;
+            $last_status = $info->status;
+            $last_cnzz_id = $info->cnzz_code_id;
+//        $last_is_https = $info->is_https;
+            $last_application_type = $info->application_type;
+            $last_uid = $info->uid;
+            $status = $this->get('domain_status')==''?1:$this->get('domain_status');
+            $id = $this->get('id');
+            $info->money = $this->get('money');
+            $info->cnzz_code_id = $this->get('cnzz_code_id');
+            $info->domain_type = $this->get('domain_type');
+            $info->is_https = $this->get('is_https');
+            $info->is_public_domain = $this->get('is_public_domain');
+            $info->application_type = $this->get('application_type');
+            $info->mark = $this->get('mark');
 
-        if($info->application_type == ''){
-            $this->msg(array('state' => 0, 'msgwords' => '未选择应用类型！'));
-        }
+            if ($info->money == '') {
+                $this->msg(array('state' => 0, 'msgwords' => '费用不能为空'));
+            }
+            if ($info->domain_type == '') {
+                $this->msg(array('state' => 0, 'msgwords' => '域名类型未选'));
+            }
 
-        if($status == 1  && $last_application_type != $info->application_type){
-            $this->msg(array('state' => 0, 'msgwords' => '该域名不是备用状态,不能修改应用类型！'));
-        }
+            if ($last_status == 0 && ($info->domain_type == 0 || $info->domain_type == 3)) {
+                if ($info->cnzz_code_id == '') {
+                    $this->msg(array('state' => 0, 'msgwords' => '总统计组别未选'));
+                }
+            }
+
+            if($info->application_type == ''){
+                $this->msg(array('state' => 0, 'msgwords' => '未选择应用类型！'));
+            }
+
+            if($status == 1  && $last_application_type != $info->application_type){
+                $this->msg(array('state' => 0, 'msgwords' => '该域名不是备用状态,不能修改应用类型！'));
+            }
 
 
-        if ($last_status != 0 && $last_type != $info->domain_type) {
-            $this->msg(array('state' => 0, 'msgwords' => '暂时不能修改域名类型'));
-        } elseif ($last_status == 0 && $last_type != $info->domain_type) {
-            $info->uid = 0;
-        }
+            if ($last_status != 0 && $last_type != $info->domain_type) {
+                $this->msg(array('state' => 0, 'msgwords' => '暂时不能修改域名类型'));
+            } elseif ($last_status == 0 && $last_type != $info->domain_type) {
+                $info->uid = 0;
+            }
 
-        //正在使用的跳转域名白域名不能变更推广人员
-        if ($last_status != 0  && $last_uid != $this->get('promotion_staff_id')) {
-            $this->msg(array('state' => 0, 'msgwords' => '该域名正在使用不能修改推广人员！'));
-        }
-        if ($last_cnzz_id != 0 && $last_cnzz_id != $info->cnzz_code_id && $last_status != 0) {
-            $this->msg(array('state' => 0, 'msgwords' => '该域名不是备用状态,不能修改总统计组别'));
-        }
-        if($last_status!=$status){
-            $info->status=$status;
-        }
+            //正在使用的跳转域名白域名不能变更推广人员
+            if ($last_status != 0  && $last_uid != $this->get('promotion_staff_id')) {
+                $this->msg(array('state' => 0, 'msgwords' => '该域名正在使用不能修改推广人员！'));
+            }
+            if ($last_cnzz_id != 0 && $last_cnzz_id != $info->cnzz_code_id && $last_status != 0) {
+                $this->msg(array('state' => 0, 'msgwords' => '该域名不是备用状态,不能修改总统计组别'));
+            }
+            if($last_status!=$status){
+                $info->status=$status;
+            }
 
-        //保存推广人员
-        $info->uid = $this->get('promotion_staff_id');
+            //保存推广人员
+            $info->uid = $this->get('promotion_staff_id');
 
-        $info->update_time = time();
-        $dbresult = $info->save();
+            $info->update_time = time();
+            $dbresult = $info->save();
+        }
         $msgarr = array('state' => 1, 'url' => $this->get('backurl'));
-        $logs = '修改了域名 ID:' . $id . '' . $info->domain . ' ';
+        $logs = '修改了域名 ID:' . $id . '(' . $domain . ' )';
         if ($dbresult === false) {
             //错误返回
             $this->msg(array('state' => 0));
         } else {
-            //新增和修改之后的动作
-            if ($info['status'] == 1) {
-                DomainPromotionChange::model()->domainchange($info->domain, $from_domain, $info['uid']);
-            }
             $this->logs($logs);
             //成功跳转提示
             $this->msg($msgarr);
         }
+
+
+
     }
 
     /**

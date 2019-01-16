@@ -61,19 +61,25 @@
                     <th class="alignleft">操作</th>
                 </tr>
                 </thead>
-                <?php
-                foreach ($page['listdata']['list'] as $r) {
-                    ?>
+                <?php $index = $this->check_u_menu(array( 'auth_tag' => 'partner_channelIndex'));
+                       $edit = $this->check_u_menu(array( 'auth_tag' => 'partner_edit'));
+                       $del = $this->check_u_menu(array( 'auth_tag' => 'partner_delete'));
+                ?>
+                <?php foreach ($page['listdata']['list'] as $r) {?>
                     <tr>
                         <td><?php echo $r['id']; ?></td>
                         <td><?php echo $r['name']; ?></td>
                         <td><?php echo date('Y-m-d', $r['update_time']); ?></td>
                         <td class="alignleft">
-                            <?php $this->check_u_menu(array('code' => '<a href="' . $this->createUrl('partner/channelIndex', array('partner_id' => $r['id'])) . '" onclick="return dialog_frame(this)">渠道</a>', 'auth_tag' => 'partner_channelIndex')); ?>
-                            &nbsp;&nbsp;
-                            <?php $this->check_u_menu(array('code' => '<a href="' . $this->createUrl('partner/edit', array('partner_id' => $r['id'])) . '">修改</a>', 'auth_tag' => 'partner_edit')); ?>
-                            &nbsp;&nbsp;
-                            <?php $this->check_u_menu(array('code' => '<a href="' . $this->createUrl('partner/delete', array('partner_id' => $r['id'])) . '"  onclick="return confirm(\'确定删除吗\')">删除</a>', 'auth_tag' => 'partner_delete')); ?>
+                            <?php if ($index) { ?>
+                                <a href="<?php echo $this->createUrl('partner/channelIndex', array('partner_id' => $r['id'])); ?>" onclick="return dialog_frame(this)">渠道</a>&nbsp;&nbsp;
+                            <?php }; ?>
+                            <?php if ($edit) { ?>
+                                <a href="<?php echo $this->createUrl('partner/edit', array('partner_id' => $r['id'])); ?>" onclick="return dialog_frame(this)">修改</a>&nbsp;&nbsp;
+                            <?php }; ?>
+                            <?php if ($del) { ?>
+                                <a href="<?php echo $this->createUrl('partner/delete', array('partner_id' => $r['id'])); ?>"  onclick="return confirm(\'确定删除吗\')">删除</a>&nbsp;&nbsp;
+                            <?php }; ?>
                         </td>
                     </tr>
                     <?php

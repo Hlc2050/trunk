@@ -450,13 +450,13 @@ class PromotionController extends AdminController
         }
 
         //表单验证
-        if ($info->promotion_type != 1) {
-            if (!$domain_ids) $this->msg(array('state' => 0, 'msgwords' => '未选择推广域名'));
+//        if ($info->promotion_type != 1) {
+//            if (!$domain_ids) $this->msg(array('state' => 0, 'msgwords' => '未选择推广域名'));
 //                //获取统计piwik 域名id
 //                $info->idsite = $this->getIdSite($domain);
 //                $info->three_cnzz = $this->getPiwikJS($info->idsite);
 //            }
-        }
+//        }
         //当链接类型为普通时
         if ($info->promotion_type == 0 || $info->promotion_type == 3) {
             if ($info->goto_domain_id == '') $this->msg(array('state' => 0, 'msgwords' => '未选择跳转域名'));

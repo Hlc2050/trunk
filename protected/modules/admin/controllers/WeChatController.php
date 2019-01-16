@@ -685,10 +685,11 @@ class WeChatController extends AdminController
 		left join customer_service_manage as c on c.id=a.customer_service_id
 		left join promotion_staff_manage as p on p.user_id=a.promotion_staff_id
 		left join cservice_group as s on s.groupid=a.department_id
+		left join customer_service_relation as m on m.cs_id=a.customer_service_id
 		";
         $params['pagebar'] = 1;
 
-        $params['select'] = " a.*,s.groupname as department_name,g.goods_name,linkage_name as character_name,bname as business_type,c.cname as customer_service,p.name as promotion_staff";
+        $params['select'] = " a.*,s.groupname as department_name,g.goods_name,linkage_name as character_name,bname as business_type,c.cname as customer_service,p.name as promotion_staff,m.goods_id";
         $params['smart_order'] = 1;
         $page['listdata'] = Dtable::model(WeChat::model()->tableName())->listdata($params);
         foreach ($page['listdata']['list'] as $key => $val) {
@@ -769,7 +770,7 @@ class WeChatController extends AdminController
         }
     }
 
-    /*
+    /**
      * 添加/更新微信使用记录表记录
      * @author lxj
      * @param $data array 插入数据数组
@@ -804,7 +805,7 @@ class WeChatController extends AdminController
         $use_log->save();
     }
 
-    /*
+    /**
      * 更新数据时微信号未有使用记录，创建使用记录
      * @param $data 更新前数据
      * @param $wx_id 微信id

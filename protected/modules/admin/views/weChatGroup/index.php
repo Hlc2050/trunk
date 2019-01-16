@@ -59,6 +59,9 @@
                     <th>操作</th>
                 </tr>
                 </thead>
+                <?php $edit =  $this->check_u_menu(array('auth_tag' => 'weChatGroup_edit'));
+                      $del =  $this->check_u_menu(array('auth_tag' => 'weChatGroup_delete'));
+                ?>
                 <?php foreach ($page['listdata']['list'] as $val) { ?>
                     <tr>
                         <td><?php echo $val['id']; ?></td>
@@ -70,9 +73,12 @@
                         <td><?php echo $val['operator']; ?></td>
                         <td><?php echo $val['status']; ?></td>
                         <td>
-                            <?php $this->check_u_menu(array('code' => '<a href="' . $this->createUrl('weChatGroup/edit?id='.$val['id'].'&bid='.$val['business_type'].'&url='.$page['listdata']['url']) . '">修改</a>', 'auth_tag' => 'weChatGroup_edit')); ?>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <?php $this->check_u_menu(array('code' => '<a href="' . $this->createUrl('weChatGroup/delete?id='.$val['id'].'&url='.$page['listdata']['url']) . '"  onclick="return confirm(\'确定删除吗\')">删除</a>', 'auth_tag' => 'weChatGroup_delete')); ?>
+                            <?php if ($edit) { ?>
+                                <a href="<?php echo $this->createUrl('weChatGroup/edit?id='.$val['id'].'&bid='.$val['business_type'].'&url='.$page['listdata']['url']);  ?>">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <?php }; ?>
+                            <?php if ($edit) { ?>
+                                <a href="<?php echo $this->createUrl('weChatGroup/delete?id='.$val['id'].'&url='.$page['listdata']['url']); ?>"  onclick="return confirm(\'确定删除吗\')">删除</a>
+                            <?php }; ?>
                         </td>
                     </tr>
                 <?php } ?>

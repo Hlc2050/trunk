@@ -550,7 +550,6 @@ class SiteController extends HomeController
         exit;
     }
 
-
     /**
      * 存第三方统计微信号长按数据
      * author:fang
@@ -733,9 +732,7 @@ class SiteController extends HomeController
         echo json_encode(array('type'=>$type, 'href_url'=>$href_url));
         exit;
     }
-    
-    
-    
+
     public function actionNowIndex()
     {
         $page = array();

@@ -1,4 +1,8 @@
 <?php
+
+/**
+ * 微信号变更记录控制器
+ */
 class WeChatChangeLogController extends  AdminController{
 	public function actionIndex(){
 		
@@ -25,4 +29,3 @@ class WeChatChangeLogController extends  AdminController{
 	}
 
 }
-?>

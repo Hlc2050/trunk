@@ -55,6 +55,9 @@
             <th width="80">操作</th>
         </tr>
     </thead>
+    <?php $eidt = $this->check_u_menu(array('auth_tag'=>'channelData_edit'));
+          $del = $this->check_u_menu(array('auth_tag'=>'channelData_delete'));
+    ?>
    <?php
    foreach($page['listdata']['list'] as $r) {
        $ready = array($r['first'], $r['second'], $r['third'], $r['fourth'], $r['fifth']);
@@ -64,17 +67,17 @@
        unset($ready[$end]);
        $avg = array_sum($ready) / count($ready);
        $avg = round($avg, 2);
-       $cost = InfancePay::model()->findByPk($r['finance_pay_id'])->pay_money;
+       $cost = $r['pay_money'];
        $price = $cost/($r['fans'])*10000;
        $price = round($price,2);
-   ?>
+       ?>
     <tr>
         <td><?php echo $r['id']?></td>
-        <td><?php echo date('Y-m-d',InfancePay::model()->findByPk($r['finance_pay_id'])->online_date)?></td>
+        <td><?php echo date('Y-m-d',$r['online_date'])?></td>
         <td><?php echo $r['name']?></td>
         <td><?php echo $r['channel_name']?></td>
         <td><?php echo $r['channel_code']?></td>
-        <td><?php echo BusinessTypes::model()->findByPk($r['business_type'])->bname;?></td>
+        <td><?php echo $r['bname']; ?></td>
         <td><?php echo $price?></td>
         <td><?php echo $avg?></td>
         <td><?php echo $r['fans'] ?></td>
@@ -84,8 +87,12 @@
         <td><?php echo $r['article_code']?></td>
         <td><?php echo date('Y-m-d',$r['update_date'])?></td>
         <td>
-        <?php $this->check_u_menu(array('code'=>'<a href="'.$this->createUrl('channelData/edit').'?id='.$r['id'].'&url='.$page['listdata']['url'].'">编辑</a>','auth_tag'=>'channelData_edit')); ?>
-        <?php $this->check_u_menu(array('code'=>'<a href="'.$this->createUrl('channelData/delete').'?ids='.$r['id'].'&url='.$page['listdata']['url'].'" onclick="return confirm(\'确定删除吗\')">删除</a>','auth_tag'=>'channelData_delete')); ?>
+            <?php if ($eidt) { ?>
+                <a href="<?php echo $this->createUrl('channelData/edit').'?id='.$r['id'].'&url='.$page['listdata']['url']; ?>">编辑</a>
+            <?php }; ?>
+            <?php if ($del) { ?>
+                <a href="<?php echo $this->createUrl('channelData/delete').'?ids='.$r['id'].'&url='.$page['listdata']['url']; ?>" onclick="return confirm(\'确定删除吗\')">删除</a>
+            <?php }; ?>
         </td>
     </tr>
    <?php

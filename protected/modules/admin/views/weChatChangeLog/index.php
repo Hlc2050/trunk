@@ -33,23 +33,17 @@
     </tr>
     </thead>
     
-   <?php 
-   foreach($page['listdata']['list'] as $r){
-   ?>
+   <?php foreach($page['listdata']['list'] as $r){ ?>
     <tr>   
         <td><?php echo $r['log_id']; ?></td>
         <td><?php echo $r['weixin_id']; ?></td>
         <td style=" word-break:break-all;max-width: 500px">
-        	<div>
-        	<?php echo helper::cut_str($r['log_details'],150); ?>
-        	</div>
+        	<div><?php echo helper::cut_str($r['log_details'],150); ?></div>
         </td>
         <td><?php echo $r['csname_true']; ?></td>
         <td><?php echo date('Y-m-d H:i:s',$r['log_time']); ?></td>
     </tr>
-   <?php 
-   } ?> 
-     
+   <?php }; ?> 
     
 </table>
   <div class="pagebar"><?php echo $page['listdata']['pagearr']['pagecode']; ?></div>

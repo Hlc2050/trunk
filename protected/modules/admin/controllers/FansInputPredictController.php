@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 微信进粉预估控制器
  * User: lxj
  * Date: 2017/12/2
  * Time: 10:46
@@ -13,6 +13,10 @@ class FansInputPredictController extends AdminController
         $page = $this->getPredictdata();
         $this->render('index',array('page'=>$page));
     }
+
+    /**
+     * 导出微信进粉预估表
+     */
     public function actionExport()
     {
         $headlist = array('日期','合作商','渠道名称','渠道编码','客服部','推广人员','微信号','合计');

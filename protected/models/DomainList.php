@@ -160,7 +160,8 @@ class DomainList extends CActiveRecord{
                 $this->updateAll($no_status_data,$condition2);
             }
         }
-        $this->updateAll($data,$condition);
+        $res =  $this->updateAll($data,$condition);
+        return $res;
     }
 
     /**

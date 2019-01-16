@@ -848,7 +848,6 @@ class MaterialController extends AdminController
 
     }
 
-
     /**
      * 往文章中插入素材库图片列表
      * author: yjh

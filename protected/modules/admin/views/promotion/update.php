@@ -388,7 +388,7 @@ if (!isset($page['info'])) {
             </tr>
             <tr>
                 <td></td>
-                <td class="alignleft"><input type="submit" class="but" id="subtn" value="确定"/>
+                    <td class="alignleft"><input type="submit" class="but" id="subtn" value="确定"/>
                     <input type="button" class="but" value="返回"
                            onclick="window.location='<?php echo $this->get('url'); ?>'"/>
                 </td>
@@ -399,6 +399,15 @@ if (!isset($page['info'])) {
 
         </table>
         <script language="javascript">
+            $("#subtn").click(function () {
+                // 提交判断
+                if($("#selected_list").length == 0){
+                    alert('请选择推广域名');
+                    event.preventDefault();
+                    return false;
+                }
+            })
+
             //路由规则显示
             var select_line_type = $("input[name=line_type]:checked").val();
             if (select_line_type == 1) {

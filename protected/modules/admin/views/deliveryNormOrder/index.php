@@ -136,7 +136,7 @@
             </tr>
             </thead>
             <?php $del = $this->check_u_menu(array('auth_tag' => 'deliveryNormOrder_del'));
-                   $eidt = $this->check_u_menu(array('auth_tag' => 'deliveryNormOrder_edit'));
+                   $edit = $this->check_u_menu(array('auth_tag' => 'deliveryNormOrder_edit'));
             ?>
             <?php foreach ($page['listdata']['list'] as $key => $val) { ?>
                 <tr>

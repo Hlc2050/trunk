@@ -89,9 +89,15 @@
                 <th>-</th>
             </tr>
             </thead>
+            <?php $check_del = $this->check_u_menu(array( 'auth_tag' => 'placeIndepOrder_del'));
+                  $edit = $this->check_u_menu(array( 'auth_tag' => 'placeIndepOrder_edit'));
+            ?>
             <?php foreach ($page['listdata']['list'] as $key => $val) { ?>
                 <tr>
-                    <td><?php $this->check_u_menu(array('code' => '<input type="checkbox" class="cklist" value="' . $val['id'] . '"/>', 'auth_tag' => 'placeIndepOrder_del')); ?></td>
+                    <td><?php if ($check_del) { ?>
+                            <input type="checkbox" class="cklist" value="<?php echo $val['id']; ?>"/>
+                        <?php }; ?>
+                    </td>
                     <td><?php echo $val['id']; ?></td>
                     <td><?php echo date('Y-m-d', $val['order_date']); ?></td>
                     <td><?php echo $val['wechat_id']; ?></td>
@@ -102,7 +108,10 @@
                     <td><?php echo $page['listdata']['userNames'][$val['tg_uid']] ?></td>
                     <td><?php echo $val['order_count']; ?></td>
                     <td><?php echo $val['order_money']; ?></td>
-                    <td><?php $this->check_u_menu(array('code' => '<a href="' . $this->createUrl('placeIndepOrder/edit').'?id='.$val['id'].'&url='.$page['listdata']['url'].'">修改</a>', 'auth_tag' => 'placeIndepOrder_edit')); ?></td>
+                    <td><?php if ($edit) { ?>
+                            <a href="<?php echo  $this->createUrl('placeIndepOrder/edit').'?id='.$val['id'].'&url='.$page['listdata']['url']; ?>">修改</a>
+                        <?php }; ?>
+                    </td>
                 </tr>
             <?php } ?>
         </table>

@@ -51,10 +51,11 @@ class StatCnzzController extends AdminController
         left join channel as c on c.id=b.channel_id
         left join partner as d on d.id=b.partner_id
         left join promotion_manage as p on p.id=a.promotion_id
+        left join cservice as m on m.csno=a.promotion_staff_id 
         ";
         $params['pagebar'] = 1;
         //$params['select']=" a.*,b.*,c.channel_name,c.channel_code,d.name as partner_name ";
-        $params['select'] = " b.*,p.promotion_type,c.channel_name,c.channel_code,d.name as partner_name,a.* ";
+        $params['select'] = " b.*,p.promotion_type,c.channel_name,c.channel_code,d.name as partner_name,m.csname_true,a.* ";
         $params['smart_order'] = 1;
         //$params['debug']=1;
         $page['listdata'] = Dtable::model(StatCnzzFlow::model()->tableName())->listdata($params);
@@ -285,7 +286,6 @@ class StatCnzzController extends AdminController
                         }
                         $promotion = Promotion::model()->findByPk($promotion_id);
                         $promotion_type = vars::get_field_str('promotion_types', $promotion->promotion_type);
-                        $promotion_domain = DomainList::model()->findByPk($promotion->domain_id)->domain;
 
                         $channel_id = $promotion->channel_id;
                         $channel = Channel::model()->findByPk($channel_id);
@@ -306,7 +306,7 @@ class StatCnzzController extends AdminController
                             $noneStatCnzz[] = $promotion_id;
                         }
                         $domains =  PromotionDomain::model()->getPromotionsDomains($promotion_id);
-                        $domains[] = $domains[$promotion_id];
+                        $pro_domains = array_column($domains[$promotion_id],'domain');;
                         //要查看是否已有此条推广 有则更新 无则新增
                         if ($pro_cnzz) {
                             $pro_cnzz->ip += $ip;
@@ -316,7 +316,7 @@ class StatCnzzController extends AdminController
                             $cid = $pro_cnzz->primaryKey;
                         } else {
                             $statCnzz = new StatCnzzFlow();
-                            $statCnzz->domain = implode('',$domains);
+                            $statCnzz->domain = implode(',',$pro_domains);
                             $statCnzz->stat_date = $stat_date;
                             $statCnzz->ip = $ip;
                             $statCnzz->uv = $uv;
@@ -327,7 +327,7 @@ class StatCnzzController extends AdminController
                             $statCnzz->create_time = time();
 
                             $statChannel = new StatChannel();
-                            $statChannel->domain = implode('',$domains);
+                            $statChannel->domain = implode(',',$pro_domains);
                             $statChannel->partner_id = $partner_id;
                             $statChannel->channel_id = $channel_id;
                             $statChannel->create_time = time();

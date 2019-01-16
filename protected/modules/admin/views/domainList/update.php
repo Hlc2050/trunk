@@ -24,17 +24,23 @@
 </div>
 <div class="main mbody">
     <form method="post"
-          action="<?php echo $this->createUrl($page['info']['id'] ? 'domainList/edit' : 'domainList/add'); ?>">
-        <input type="hidden" id="id" name="id" value="<?php echo $page['info']['id']; ?>"/>
-        <input type="hidden" id="from_domain" name="from_domain" value="<?php echo $page['info']['domain']; ?>"/>
+          action="<?php echo $this->createUrl($page['info']['domain_ids'] ? 'domainList/edit' : 'domainList/add'); ?>">
+        <input type="hidden" id="id" name="id" value="<?php echo $page['info']['domain_ids']; ?>"/>
         <input type="hidden" id="backurl" name="backurl" value="<?php echo $this->get('url'); ?>"/>
 
         <table class="tb3">
             <tr>
-                <th colspan="8" class="alignleft"><?php echo $page['info']['id'] ? '编辑域名' : '添加域名' ?></th>
+                <th colspan="8" class="alignleft"><?php echo $page['info']['domain_ids'] ? '编辑域名' : '添加域名' ?></th>
             </tr>
+            <?php if ($page['info']['multi_edit']==1) {?>
+                <tr>
+                    <td></td>
+                    <td><font color="red">批量编辑时，为空的参数将不做修改</font></td>
+                    <td></td>
+                </tr>
+            <?php } ?>
 
-            <?php if (!$page['info']['id']) { ?>
+            <?php if (!$page['info']['domain_ids']) { ?>
                 <tr>
                     <td class="alignleft">域名</td>
                     <td class="alignleft">费用</td>
@@ -147,32 +153,37 @@
 
             <?php } else { ?>
                 <tr>
-                    <td>域名：</td>
+                    <td width="80">域名：</td>
                     <td><?php echo $page['info']['domain'] ?></td>
                     <td></td>
                 </tr>
-                <tr>
-                    <td>状态：</td>
-                    <td><?php echo vars::get_field_str('domain_status', $page['info']['status']); ?></td>
-                    <td></td>
-                </tr>
+                <?php if(isset($page['info']['status']) ) { ?>
+                    <tr>
+                        <td>状态：</td>
+                        <td><?php echo vars::get_field_str('domain_status', $page['info']['status']); ?></td>
+                        <td></td>
+                    </tr>
+                <?php }?>
                 <tr>
                     <td>费用：</td>
                     <td width="100" class="alignleft"><input class="ipt" name="money"
                                                              value="<?php echo $page['info']['money'] ?>"></td>
                     <td></td>
                 </tr>
-                <tr>
-                    <td width="80">类型：</td>
-                    <td class="alignleft">
-                        <select id="dType" name="domain_type">
-                            <?php foreach (vars::$fields['domain_types'] as $value){?>
-                                <option value="<?php echo $value['value'];?>" <?php if ($page['info']['domain_type'] == $value['value']) echo 'selected';?>><?php echo $value['txt'];?></option>
-                            <?php } ?>
-                        </select>
-                    </td>
-                    <td></td>
-                </tr>
+                <?php if($page['info']['no_unuse_domain'] === 0) {?>
+                    <tr>
+                        <td width="80">类型：</td>
+                        <td class="alignleft">
+                            <select id="dType" name="domain_type">
+                                <option value="">请选择</option>
+                                <?php foreach (vars::$fields['domain_types'] as $value){?>
+                                    <option value="<?php echo $value['value'];?>" <?php if ( $page['info']['domain_type'] == "".$value['value']."") echo 'selected';?>><?php echo $value['txt'];?></option>
+                                <?php } ?>
+                            </select>
+                        </td>
+                        <td></td>
+                    </tr>
+
                 <tr id="tg">
                     <td>推广人员：</td>
                     <td class="alignleft">
@@ -203,10 +214,11 @@
                     </td>
                     <td></td>
                 </tr>
+                <?php } ?>
                 <tr>
                     <td>是否支持https：</td>
                     <td class="alignleft">
-                        否&nbsp;<input name="is_https" type="radio" value="0" checked="checked"/>&nbsp;&nbsp;&nbsp;
+                        否&nbsp;<input name="is_https" type="radio" value="0"   <?php if ($page['info']['is_https'] == '0') echo 'checked'; ?>/>&nbsp;&nbsp;&nbsp;
                         是&nbsp;<input name="is_https" type="radio"
                                       value="1" <?php if ($page['info']['is_https'] == 1) echo 'checked'; ?>/>
                     </td>
@@ -216,19 +228,21 @@
                     <td>公众号：</td>
                     <td class="alignleft">
                     <select name="is_public_domain">
-                        <option value="0" <?php if($page['info']['is_public_domain'] == 0) echo "selected"; ?>>否</option>
-                        <option value="1" <?php if($page['info']['is_public_domain'] == 1) echo "selected"; ?>>是</option>
+                        <option value="">请选择</option>
+                        <option value="0" <?php if($page['info']['is_public_domain'] === '0') echo "selected"; ?>>否</option>
+                        <option value="1" <?php if($page['info']['is_public_domain'] === '1') echo "selected"; ?>>是</option>
                     </select>
                     </td>
                     <td></td>
                 </tr>
                 <?php
-                if ($page['info']['status'] != 1) {
+                if (isset($page['info']['status']) && $page['info']['status'] != 1 || $page['info']['online_domain'] === 0) {
                     ?>
                     <tr>
                         <td>域名状态：</td>
                         <td class="alignleft">
                             <select name="domain_status" >
+                                <option value="">请选择</option>
                                 <option value="0" <?php echo $page['info']['status'] == '0' ? 'selected' : ''; ?>>备用
                                 </option>
                                 <option value="2" <?php echo $page['info']['status'] == '2' ? 'selected' : ''; ?>>被拦截
@@ -242,17 +256,19 @@
                         <td></td>
                     </tr>
                 <?php } ?>
+            <?php if($page['info']['no_unuse_domain'] === 0) {?>
                 <tr>
                     <td width="80">应用类型：</td>
                     <td class="alignleft">
                         <select width="100" name="application_type">
-                            <option value=" ">请选择</option>
+                            <option value="">请选择</option>
                             <option value="0" <?php echo $page['info']['application_type'] == '0' ? 'selected' : ''; ?>>普通应用</option>
                             <option value="1" <?php echo $page['info']['application_type'] == '1' ? 'selected' : ''; ?>>静态应用</option>
                         </select>
                     </td>
                     <td></td>
                 </tr>
+                <?php }?>
                 <tr>
                     <td>备注：</td>
                     <td>

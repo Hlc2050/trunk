@@ -155,9 +155,7 @@
                     <td>-</td>
                 </tr>
 
-                <?php
-                foreach ($page['listdata']['list'] as $r) {
-                    ?>
+                <?php foreach ($page['listdata']['list'] as $r) { ?>
                     <tr>
                         <td><input type="checkbox" class="cklist" value="<?php echo $r['id']; ?>"/></td>
                         <td><?php echo $r['id']; ?></td>
@@ -170,10 +168,9 @@
                         <td><?php echo $r['pv'] ?></td>
                         <td><?php echo $r['uv'] ?></td>
                         <td><?php echo $r['ip'] ?></td>
-                        <td><?php echo AdminUser::model()->getUserNameByPK($r['promotion_staff_id']); ?></td>
+                        <td><?php echo $r['csname_true']; ?></td>
                     </tr>
-                    <?php
-                } ?>
+                    <?php }; ?>
                 </tbody>
             </table>
             <div class="pagebar"><?php echo $page['listdata']['pagearr']['pagecode']; ?></div>

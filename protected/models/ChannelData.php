@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 渠道数据表
  * User: fang
  * Date: 2017/1/9
  * Time: 17:55

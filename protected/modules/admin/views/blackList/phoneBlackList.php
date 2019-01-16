@@ -9,7 +9,7 @@
     <form action="<?php echo $this->createUrl('blackList/leadPhoneExcel') ?>" method="post"
           enctype="multipart/form-data">
         <input type="file" name="filename">
-        <it type="submit" class="but2" value="导入手机黑名单">
+        <input type="submit" class="but2" value="导入手机黑名单">
     </form>
 </div>
 </div>

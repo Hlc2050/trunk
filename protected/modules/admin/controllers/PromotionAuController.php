@@ -1,12 +1,11 @@
 <?php
-//推广测试人员关联
+
 /**
- * Created by PhpStorm.
+ * 推广测试人员关联
  * User: hlc
  * Date: 2018/11/14
  * Time: 10:09
  */
-
 class PromotionAuController extends AdminController
 {
     public function actionIndex()
@@ -18,7 +17,6 @@ class PromotionAuController extends AdminController
     /**
      * 支持人员权限添加
      */
-
     public function actionAdd(){
         $arr  = explode('/,',$_GET['data']);
         $test_staff_id = array();
@@ -53,26 +51,32 @@ class PromotionAuController extends AdminController
     /**
      * ajax获取select2数据
      */
-
     public function actionGetData(){
-        $result = PromotionStaffRelation::model()->findAll('promotion_staff_id='.$_POST['promotionStaff']);
+        $result = PromotionStaffRelation::model()->findAll();
         $promotionStaffArr = $this->getPromotionStaff();
         $temp = array();
         foreach ($result as $key=>$value){
-            $temp[$key]['id'] = $value['test_staff_id'];
-            $temp[$key]['text'] = $promotionStaffArr[$value['test_staff_id']];
+            $temp[$value['promotion_staff_id']][] = array(
+                'id' => $value['test_staff_id'],
+                'text' => $promotionStaffArr[$value['test_staff_id']],
+        );
         }
+
         echo json_encode($temp);
     }
 
-    //获取推广人员数据
+    /**
+     * 获取推广人员数据
+     */
     function getPromotionStaff(){
         $promotionStaffArr = PromotionStaff::model()->getPromotionStaffList(1);
         $promotionStaffArr = $this->changeType($promotionStaffArr,'user_id','name');
         return $promotionStaffArr;
     }
 
-    //修改数据格式 $str1 =$key $str2=$value
+    /**
+     * 修改数据格式 $str1 =$key $str2=$value
+     */
     function changeType($array = array(),$str1 = '',$str2 = ''){
         $temp = array();
         foreach ($array as $value){

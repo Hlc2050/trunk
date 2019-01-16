@@ -147,6 +147,7 @@ if ($psq_flag == 1) {
         $r_type = $info->review_type;
         $reviewDetailList = Dtable::toArr(MaterialReviewDetail::model()->findAll('review_id=' . $page['info']['review_id'] . " order by id asc"));
         $reviewNum = count($reviewDetailList);
+
         if ($r_type == 2) {
             $numArr = array_count_values(array_column($reviewDetailList, 'floor'));
             $num = 0;

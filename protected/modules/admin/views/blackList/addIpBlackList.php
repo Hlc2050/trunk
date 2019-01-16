@@ -12,6 +12,48 @@
         $("table[class='tb3']").append(html);
     })
 
+    function chkForm() {
+        var list = [];
+        var remark = [];
+        $("input[name='ipblacklist[]']").each(function () {
+            if($(this).val() != '') list.push($(this).val());
+        });
+        $("input[name='ipremark[]']").each(function () {
+            if($(this).val() != '') remark.push($(this).val());
+        });
+
+        if(list.length == 0 && remark.length == 0){
+            alert('请填写至少一条数据');
+            event.preventDefault();
+            return false;
+        }else{
+            var len = list.length>remark.length ?list.length:remark.length;
+            for (var i=0;i<len;i++){console.log(remark[i]);
+                if(list[i] && !remark[i] == undefined){
+                    alert('请填写ip');
+                    $("input[name='ipblacklist[]']")[i].focus();
+                    event.preventDefault();
+                    return false;
+                }else if(list[i] == undefined && remark[i]){
+                    alert('请填写备注');
+                    $("input[name='ipremark[]']")[i].focus();
+                    event.preventDefault();
+                    return false;
+                }else if(IsIP(list[i])){
+                    alert('ip不符合规则');
+                    $("input[name='ipblacklist[]']")[i].focus();
+                    event.preventDefault();
+                    return false;
+                }
+         }
+        }
+    }
+
+    function IsIP(ip) {
+        var pat = "/^(?:(?:2[0-4][0-9]\.)|(?:25[0-5]\.)|(?:1[0-9][0-9]\.)|(?:[1-9][0-9]\.)|(?:[0-9]\.)){3}(?:(?:2[0-5][0-5])|(?:25[0-5])|(?:1[0-9][0-9])|(?:[1-9][0-9])|(?:[0-9]))$/";
+        return ip.text(pat);
+    }
+
     $(function () {
         $("#add").click(function () {
             var html = '<tr>' + '<td width="100"><input class="ipt" name="ipblacklist[]"></td>' +
@@ -25,7 +67,7 @@
     <div class="snav">下单黑名单 » 黑名单列表 » 新增ip黑名单</div>
 </div>
 <div class="main mbody">
-    <form name="form" action="<?php echo $this->createUrl('blackList/addIp'); ?>" method="post" onsubmit="return checkForm()" style="width: 300px;">
+    <form name="form" action="<?php echo $this->createUrl('blackList/addIp'); ?>" method="post" onsubmit="return chkForm()" style="width: 300px;">
         <table class="tb3">
             <tr>
                 <th colspan="2" class="alignleft">新增ip黑名单</th>

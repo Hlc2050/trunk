@@ -29,24 +29,29 @@
 <script src="/static/lib/js/select2.js"></script>
 <script type="text/javascript">
     window.onload = function () {
-        $('input[name=promotionStaff]').each(function () {
-            var promotionStaff =$(this).val();
             $.ajax({
                 type: "POST",
                 url: "/admin/promotionAu/getData",
-                data: {'promotionStaff': promotionStaff},
                 dataType: "json",
-                success: function (result) {
+                success: function (result) {console.log(result);
                     if(result){
-                        $("#tagId_"+promotionStaff).each(function () {
-                            for(i=0;i<result.length;i++){
-                                $("#tagId_"+promotionStaff).append(new Option(result[i].text,  result[i].id, false, true));
-                            }
+
+                        $('input[name=promotionStaff]').each(function () {
+                            var promotionStaff =$(this).val();
+                            $("#tagId_"+promotionStaff).each(function () {
+                                var pro = result[promotionStaff];
+                                console.log(pro);
+                                if (pro != undefined){
+                                for(i=0;i<pro.length;i++){
+                                    $("#tagId_"+promotionStaff).append(new Option(pro[i].text,  pro[i].id, false, true))
+                                }
+                                }
+                            })
                         })
-                    }
+                        }
                 }
             })
-        })
+
     }
 
     $(function(){
