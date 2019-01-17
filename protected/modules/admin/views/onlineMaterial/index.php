@@ -2,7 +2,7 @@
 <div class="main mhead">
     <div class="snav">推广管理 » 上线素材列表</div>
     <div class="mt10">
-        <form action="<?php echo $this->createUrl('onlineMaterial/index'); ?>">
+        <form action="<?php echo $this->createUrl('onlineMaterial/index'); ?>" >
 
             <select id="search_type" name="search_type">
                 <option value="partner" <?php echo $this->get('search_type') == 'partner' ? 'selected' : ''; ?>>合作商</option>
@@ -67,7 +67,7 @@
         <table class="tb fixTh">
             <thead>
             <tr>
-                <th align='center'><?php echo helper::field_paixu(array('url' => '' . $this->createUrl('onlineMaterial/index') . '?p=' . $_GET['p'] . '', 'field_cn' => '推广ID', 'field' => 'id')); ?></th>
+                <th align='center'><?php echo helper::field_paixu(array('url' => '' . $this->createUrl('onlineMaterial/index') . '?p=' . $_GET['p']  . '', 'field_cn' => '推广ID', 'field' => 'id')); ?></th>
                 <th>合作商</th>
                 <th>渠道名称</th>
                 <th>渠道编码</th>
@@ -81,24 +81,24 @@
                 <th>操作</th>
             </tr>
             </thead>
-            <?php foreach ($page['listdata']['list'] as $key => $val) {
-                $promotion_type = $val['promotion_type']==''?'-':vars::get_field_str('promotion_types', $val['promotion_type']);//状态
-
-                ?>
+            <?php $eidt = $this->check_u_menu(array('auth_tag' => 'onlineMaterial_edit'));  ?>
+            <?php foreach ($page['listdata']['list'] as $key => $val) { ?>
                 <tr>
                     <td><?php echo $val['promotion_id']; ?></td>
                     <td><?php echo $val['partner_name']; ?></td>
                     <td><?php echo $val['channel_name']; ?></td>
                     <td><?php echo $val['channel_code']; ?></td>
                     <td><?php echo $val['article_code']; ?></td>
-                    <td><?php echo $promotion_type; ?></td>
+                    <td><?php echo  $val['promotion_type']==''?'-':vars::get_field_str('promotion_types', $val['promotion_type']); ?></td>
                     <td style="max-width: 350px"><?php echo $val['article_title']; ?></td>
-                    <td><?php echo Linkage::model()->GoodsCategoryById($val['cat_id']); ?></td>
-                    <td><?php echo AdminUser::model()->getUserNameByPK($val['promotion_staff_id']); ?></td>
+                    <td><?php echo $val['linkage_name']; ?></td>
+                    <td><?php echo $val['csname_true']; ?></td>
                     <td><?php echo date('Y-m-d h:i:s', $val['update_time']); ?></td>
                     <td><?php echo vars::get_field_str('promotion_status', $val['status']); ?></td>
                     <td>
-                        <?php $this->check_u_menu(array('code' => '<a href="' . $this->createUrl('onlineMaterial/edit?id=' . $val['id'] . '&url=' . $page['listdata']['url']) . '">编辑</a>', 'auth_tag' => 'onlineMaterial_edit')); ?>
+                        <?php if ($eidt) { ?>
+                            <a href="<?php echo $this->createUrl('onlineMaterial/edit?id=' . $val['id'] . '&url=' . $page['listdata']['url']); ?>">编辑</a>
+                        <?php }; ?>
                     </td>
                 </tr>
             <?php } ?>

@@ -1,5 +1,5 @@
 <div class="main mhead">
-    <form action="<?php echo $this->createUrl('effectCacheTable/index?'); ?>">
+    <form action="<?php echo $this->createUrl('effectCacheTable/index?'); ?>" method="get">
         <input type="hidden" name="condition" value="channel_id"/>
         <input type="hidden" name="group_id" value="0"/>
         <div class="mt10">
@@ -82,56 +82,14 @@
                 <th>计费方式</th>
                 <th>商品</th>
                 <th>
-                    <a href="<?php
-                    $field = 'delivery_count';
-                    $field_name = $this->get('field');
-                    $icon = '';
-                    if ($field_name == "delivery_count") {
-                        if (1 == $this->get('delivery_count_asc')) {
-                            $icon = '▼';
-                            $delivery_count_asc = 2;
-                        } elseif (2 == $this->get('delivery_count_asc'))  {
-                            $delivery_count_asc = 0;
-                            $icon = '▲';
-                        }else{
-                            $delivery_count_asc = 1;
-                        }
-                    } else {
-                        $delivery_count_asc = 1;
-                    }
-
-                    if ($field_name == "delivery_money") {
-                        if (1 == $this->get('delivery_money_asc')) {
-                            $icon = '▼';
-                            $delivery_money_asc = 2;
-                        } elseif (2 == $this->get('delivery_money_asc')) {
-                            $delivery_money_asc = 0;
-                            $icon = '▲';
-                        } else {
-                            $delivery_money_asc = 1;
-                        }
-                    } else {
-                        $delivery_money_asc = 1;
-                    }
-                    echo $this->createUrl('effectCacheTable/index?field=' . $field . '&delivery_count_asc=' . $delivery_count_asc . $page['field_option'] . '&condition=channel_id');
-                    ?>">发货量<?php if ($field_name == "delivery_count") {
-                            echo $icon;
-                        }; ?></a>
+                    <?php echo helper::field_paixu(array('url' => '' . $this->createUrl('effectCacheTable/index') . '?p=' . $_GET['p']. $page['field_option'].'&condition=channel_id'. '', 'field_cn' => '发货量', 'field' => 'delivery_count')); ?>
                 </th>
-                <th><a href="<?php
-                    $field = 'delivery_money';
-                    $field_name = $this->get('field');
-                    echo $this->createUrl('effectCacheTable/index?field=' . $field . '&delivery_money_asc=' . $delivery_money_asc . $page['field_option'] . '&condition=channel_id');
-                    ?>">发货金额<?php if ($field_name == "delivery_money") {
-                            echo $icon;
-                        } ?></a></th>
-                <th><a href="<?php
-                    $field = 'delivery_money';
-                    $field_name = $this->get('field');
-                    echo $this->createUrl('effectCacheTable/index?field=' . $field . '&delivery_money_asc=' . $delivery_money_asc . $page['field_option'] . '&condition=channel_id');
-                    ?>">单项占整体比例<?php if ($field_name == "delivery_money") {
-                            echo $icon;
-                        }; ?></a></th>
+                <th>
+                    <?php echo helper::field_paixu(array('url' => '' . $this->createUrl('effectCacheTable/index') . '?p=' . $_GET['p']. $page['field_option'].'&condition=channel_id'. '', 'field_cn' => '发货金额', 'field' => 'delivery_money')); ?>
+                </th>
+                <th>
+                    <?php echo helper::field_paixu(array('url' => '' . $this->createUrl('effectCacheTable/index') . '?p=' . $_GET['p']. $page['field_option'].'&condition=channel_id'. '', 'field_cn' => '单项占整体比例', 'field' => 'delivery_money')); ?>
+                </th>
             </tr>
             <tr>
                 <th>合计</th>

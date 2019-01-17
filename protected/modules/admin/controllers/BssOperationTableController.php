@@ -12,8 +12,7 @@ class BssOperationTableController extends AdminController
         $this->render('index', array('page' => $page));
     }
 
-
-    /*
+    /**
      * AJAX获取客服部对应商品
      * author: yjh
      */
@@ -37,7 +36,7 @@ class BssOperationTableController extends AdminController
 
     }
 
-    /*
+    /**
     * AJAX获取部门对应推广人员
     * author: yjh
     */
@@ -69,6 +68,7 @@ class BssOperationTableController extends AdminController
             echo CHtml::tag('option', array('value' => ''), CHtml::encode('全部'), true);
         }
     }
+
     /**
      * AJAX获取计费方式
      * author: yjh
@@ -85,6 +85,7 @@ class BssOperationTableController extends AdminController
             echo CHtml::tag('option', array('value' => ''), CHtml::encode('全部'), true);
         }
     }
+
     private function getBssData()
     {
         $params = array();

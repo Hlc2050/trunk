@@ -1,11 +1,10 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 电销渠道效果控制器
  * User: Administrator
  * Date: 2017/11/2
  * Time: 9:16
  */
-
 class OrderGoodsEffectController extends AdminController
 {
 
@@ -27,7 +26,9 @@ class OrderGoodsEffectController extends AdminController
         $this->render('index', array('allData' => $allData));
     }
 
-    // 导出
+    /**
+     * 导出下单商品统计表
+     */
     public function actionExport()
     {
         $headlist = array('日期', '下单商品', '进线量', '发货量', '发货金额', '订单转化');
@@ -52,7 +53,9 @@ class OrderGoodsEffectController extends AdminController
         helper::downloadCsv($headlist, $export_row, '下单商品统计表-' . date('Ymd', time()));
     }
 
-    // 根据商品组获取商品数据
+    /**
+     * 根据商品组获取商品数据
+     */
     public function actionGetGoodsByGroup()
     {
         if (!$this->get('package_group_id')) {
@@ -68,7 +71,6 @@ class OrderGoodsEffectController extends AdminController
     }
 
     /**
-     *
      * 获取统计表数据
      * @param $data_typ int 0显示,1导出
      */
@@ -125,7 +127,6 @@ class OrderGoodsEffectController extends AdminController
      * 下单商品模糊搜索
      * author: hlc
      */
-
     public function actionSearchPackage()
     {
         //下单商品模糊查询

@@ -8,7 +8,7 @@
     </div>
     <form action="<?php echo $this->createUrl('blackList/leadIpExcel') ?>" method="post" enctype="multipart/form-data">
         <input type="file" name="filename">
-        <input type="submit" class="but2" value="导入ip黑名单">
+        <input type="submit" name="submit" class="but2" value="导入ip黑名单">
     </form>
 </div>
 </div>
@@ -24,14 +24,21 @@
     </tr>
     </thead>
     <tbody>
+    <?php $edit = $this->check_u_menu(array('auth_tag' => 'blacklist_changeip'));
+          $del = $this->check_u_menu(array('auth_tag' => 'blacklist_deleteip'));
+    ?>
     <?php foreach ($page['listdata']['list'] as $black_ip) { ?>
         <tr>
             <td><input type="checkbox" class="cklist" value="<?php echo $black_ip['id'] ?>"></td>
             <td><?php echo $black_ip['ip_adress'] ?></td>
             <td><?php echo $black_ip['remark'] ?></td>
-            <td><?php $this->check_u_menu(array('code' => '<a onclick="return dialog_frame(this,200,150,1)" href="' . $this->createUrl('blackList/changeIp?id=' . $black_ip['id']) . '" />' . '修改</a>', 'auth_tag' => 'blacklist_changeip')); ?>
-                <?php $this->check_u_menu(array('code' => '<a onclick="confirm(\'确认删除吗！\')?location.href=\'' . $this->createUrl('blackList/deleteIp?id=' . $black_ip['id']) . '\':\'\'"/>' . '删除</a>', 'auth_tag' => 'blacklist_deleteip')); ?>
-
+            <td>
+                <?php if ($edit) { ?>
+                    <a onclick="return dialog_frame(this,200,150,1)" href="<?php echo $this->createUrl('blackList/changeIp?id=' . $black_ip['id']); ?>" />修改</a>&nbsp;&nbsp;
+                <?php }; ?>
+                <?php if ($del) { ?>
+                    <a onclick="confirm('确认删除吗！')?location.href='<?php echo $this->createUrl('blackList/deleteIp?id=' . $black_ip['id']); ?>':'';">删除</a>
+                <?php }; ?>
             </td>
         </tr>
     <?php } ?>

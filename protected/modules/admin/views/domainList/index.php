@@ -108,7 +108,7 @@
                 <?php $this->check_u_menu(array('code' => '<input type="button" class="but2" value="删除" onclick="set_some(\'' . $this->createUrl('domainList/delete') . '?ids=[@]\',\'确定删除吗？\');" />', 'auth_tag' => 'domainList_delete')); ?>
                 <?php $this->check_u_menu(array('code' => '<input type="button" class="but2" value="模板下载" onclick="location=\'' . $this->createUrl('domainList/template') . '\'" />', 'auth_tag' => 'domainList_template')); ?>
                 <?php $this->check_u_menu(array('code' => '<input type="button" class="but2" value="列表导出" onclick="exportList()" />', 'auth_tag' => 'domainList_export')); ?>
-                <?php $this->check_u_menu(array('code' => '<input type="button" class="but2" value="批量编辑" onclick="set_some(\'' . $this->createUrl('domainList/edit') . '?id=[@]\',\'none\');"  />', 'auth_tag' => 'domainList_edit')); ?>
+                <?php $this->check_u_menu(array('code' => '<input type="button" class="but2" value="批量编辑" onclick="set_some(\'' . $this->createUrl('domainList/edit') . '?id=[@]&url='.$page['listdata']['url'].'\',\'none\');"  />', 'auth_tag' => 'domainList_edit')); ?>
             <form action="<?php echo $this->createUrl('domainList/load'); ?>" method="post" target="frame02"
                   enctype="multipart/form-data" style="display: inline-block">
                 <a href="javascript:;" class="file">选择文件

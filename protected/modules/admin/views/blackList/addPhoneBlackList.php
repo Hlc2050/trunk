@@ -15,33 +15,50 @@
     function chkForm() {
         var list = [];
         var remark = [];
+        var list_num = 0;
+        var remark_num = 0;
         $("input[name='phoneblacklist[]']").each(function () {
-            if($(this).val() != '') list.push($(this).val());
+            list.push($(this).val());
+            if($(this).val() == '') list_num +=1
         });
         $("input[name='phoneremark[]']").each(function () {
-            if($(this).val() != '') remark.push($(this).val());
+            remark.push($(this).val());
+            if($(this).val() == '') remark_num +=1
         });
 
-        if(list.length == 0 && remark.length == 0){
+      if (list_num == 4 && remark_num == 4) {
             alert('请填写至少一条数据');
             event.preventDefault();
             return false;
         }else{
-            var len = list.length>remark.length ?list.length:remark.length;
-            for (var i=0;i<len;i++){
-                if(list[i] && !remark[i]){
-                    alert('请填写手机号');
+            var len = list.length > remark.length ? list.length : remark.length;
+
+           for (var i = 0; i < len; i++) {
+                var row = i+1;
+                if (!list[i] && remark[i]) {
+                    alert('请填写第'+row+'行手机号');
                     $("input[name='phoneblacklist[]']")[i].focus();
                     event.preventDefault();
                     return false;
-                }else if(!list[i] && !remark[i]){
-                    alert('请填写备注');
+                } else if (list[i] && !remark[i]) {
+                    alert('请填写第'+row+'行备注');
                     $("input[name='phoneremark[]']")[i].focus();
+                    event.preventDefault();
+                    return false;
+                } else if (IsPhone(list[i]) == false && list[i]) {
+                    alert('第'+row+'行手机号不符合规则');
+                    $("input[name='phoneblacklist[]']")[i].focus();
                     event.preventDefault();
                     return false;
                 }
             }
         }
+
+    }
+
+    function IsPhone(phone) {
+        var reg =/^0?1[3|4|5|6|7|8][0-9]\d{8}$/;
+        return reg.test(phone);
     }
 
     $(function () {

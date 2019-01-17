@@ -78,6 +78,7 @@
             </tr>
             </thead>
             <tbody>
+            <?php $edit = $this->check_u_menu(array('auth_tag' => 'articleDelMessage_edit')); ?>
             <?php foreach ($page['listdata']['list'] as $r) { ?>
                 <tr>
                     <td><input type="checkbox" class="cklist" value="<?php echo $r['id']; ?>"/></td>
@@ -100,7 +101,9 @@
                            style="color: black;"><?php echo helper::cut_str($r['mark'], 10); ?></a>
                     </td>
                     <td>
-                        <?php $this->check_u_menu(array('code' => '<input value="编辑" type="button" class="but1" onclick="return dialog_frame(this,350,400,1)"  href="' . $this->createUrl('articleDelMessage/edit?id=' . $r['id'] . '&url=' . $page['listdata']['url']) . '"/>', 'auth_tag' => 'articleDelMessage_edit')); ?>
+                        <?php if ($edit) { ?>
+                            <input value="编辑" type="button" class="but1" onclick="return dialog_frame(this,350,400,1)"  href="<?php echo $this->createUrl('articleDelMessage/edit?id=' . $r['id'] . '&url=' . $page['listdata']['url']); ?>"/>
+                        <?php }; ?>
                     </td>
                 </tr>
             <?php } ?>

@@ -1,14 +1,12 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 业绩表控制器
  * User: Administrator
  * Date: 2017/11/2
  * Time: 9:16
  */
-
 class OrderEffectTableController extends AdminController
 {
-
     public function actionIndex()
     {
         $uid=Yii::app()->admin_user->uid;
@@ -63,6 +61,7 @@ class OrderEffectTableController extends AdminController
         $allData['params_groups'] = vars::$fields['effect_tables'];
         $this->render('index',array('allData'=>$allData));
     }
+
     /**
      * 生成缓存
      *
@@ -155,7 +154,9 @@ class OrderEffectTableController extends AdminController
         exit();
     }
 
-    // 整体表导出
+    /**
+     * 导出电销整体表
+     */
     public function actionExport()
     {
         $headlist = array('上线日期','合作商','渠道名称','渠道编码','微信号ID','计费方式','推广人员','客服部','商品','投入金额','发货金额','ROI','进线成本','均线产出','发货量','进线量','IP','UV','渠道转化','图文转化');
@@ -206,7 +207,9 @@ class OrderEffectTableController extends AdminController
         return $data;
     }
 
-    // 整体表数据
+    /**
+     * 获取整体表数据
+     */
     private function getAllEffectData()
     {
         $cache = Yii::app()->cache;
@@ -301,7 +304,9 @@ class OrderEffectTableController extends AdminController
         return $new_arr;
     }
 
-    // 推广表数据
+    /**
+     * 获取推广表数据
+     */
     private function promotonData()
     {
         $cache = Yii::app()->cache;
@@ -344,7 +349,9 @@ class OrderEffectTableController extends AdminController
         return $data;
     }
 
-    // 合作商表数据
+    /**
+     * 获取合作商表数据
+     */
     private function partnerData()
     {
         $cache = Yii::app()->cache;
@@ -386,7 +393,10 @@ class OrderEffectTableController extends AdminController
         $data['list'] = ArrayGroupBy::groupBy($records['list'], $group_by_fields, $group_by_value);
         return $data;
     }
-    // 渠道数据
+
+    /**
+     * 获取渠道数据
+     */
     private function channelData()
     {
         $cache = Yii::app()->cache;
@@ -433,7 +443,9 @@ class OrderEffectTableController extends AdminController
         return $data;
     }
 
-    // 客服部表数据
+    /**
+     * 客服部表数据
+     */
     private function serviceData()
     {
         $cache = Yii::app()->cache;
@@ -476,7 +488,9 @@ class OrderEffectTableController extends AdminController
         return $data;
     }
 
-    // 计费方式表数据
+    /**
+     * 计费方式表数据
+     */
     private function chargeData()
     {
         $cache = Yii::app()->cache;
@@ -518,7 +532,9 @@ class OrderEffectTableController extends AdminController
         return $data;
     }
 
-    // 图文编码表数据
+    /**
+     * 图文编码表数据
+     */
     private function articleData()
     {
         $cache = Yii::app()->cache;
@@ -560,7 +576,10 @@ class OrderEffectTableController extends AdminController
         $data['list'] = ArrayGroupBy::groupBy($records['list'], $group_by_fields, $group_by_value);
         return $data;
     }
-    // 分表数据
+
+    /**
+     * 分表数据
+     */
     private function foreachFilter($records)
     {
         $new_arr = array();

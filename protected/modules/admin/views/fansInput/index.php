@@ -89,13 +89,13 @@
                 <th><?php echo  $page['listdata']['not_reply_fans'];?></th><th><?php echo  $page['listdata']['age_dif_fans'];?></th><th><?php echo  $page['listdata']['disease_fans'];?></th><th><?php echo  $page['listdata']['valid_fans'];?></th><th>-</th>
             </tr>
             </thead>
-            <?php $del = $this->check_u_menu(array('auth_tag' => 'fansInput_del'));
+            <?php $check_del = $this->check_u_menu(array('auth_tag' => 'fansInput_del'));
                   $edit = $this->check_u_menu(array('auth_tag' => 'fansInput_edit'));
             ?>
             <?php foreach ($page['listdata']['list'] as $key => $val) { ?>
                 <?php $valid_fans = $val['addfan_count']-$val['del_black']-$val['brush_fans']-$val['gender_dif_fans']- $val['not_reply_fans']-$val['age_dif_fans']-$val['disease_fans']; ?>
                 <tr>
-                    <td><?php if ($del) { ?>
+                    <td><?php if ($check_del) { ?>
                             <input type="checkbox" class="cklist" value="<?php echo $val['id']; ?>"/>
                         <?php }; ?>
                     </td>

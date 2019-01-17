@@ -87,8 +87,16 @@ class Dtable extends CActiveRecord{
 				}
 			}
 		}
-			
-		$sql="select  ".$params['select']." from ".$params['from'].$params['join'].$params['where'].$params['group'].$params['order']." limit ".$offset.','.$params['pagesize'];		
+		//取消获取数量限制
+		if(trim($params['pagesize']) == '*'){
+		    $limt = '';
+
+        }else{
+            $limt = " limit ".$offset.','.$params['pagesize'];
+        }
+
+		$sql="select  ".$params['select']." from ".$params['from'].$params['join'].$params['where'].$params['group'].$params['order'].$limt;
+
 		if($params['group']){
 			$csql="select count(*) as total from (select  count(*) as total from ".$params['from'].$params['join'].$params['where'].$params['group'].') as ttt';
 		}else{

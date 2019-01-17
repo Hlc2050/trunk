@@ -9,7 +9,7 @@
     <form action="<?php echo $this->createUrl('blackList/leadPhoneExcel') ?>" method="post"
           enctype="multipart/form-data">
         <input type="file" name="filename">
-        <input type="submit" class="but2" value="导入手机黑名单">
+        <input type="submit" name="submit" class="but2" value="导入手机黑名单">
     </form>
 </div>
 </div>
@@ -25,13 +25,20 @@
     </tr>
     </thead>
     <tbody>
+    <?php $edit = $this->check_u_menu(array( 'auth_tag' => 'blacklist_changephone'));
+          $del = $this->check_u_menu(array( 'auth_tag' => 'blacklist_deletephone'));
+    ?>
     <?php foreach ($page['listdata']['list'] as $black_phone) { ?>
         <tr>
             <td><input type="checkbox" class="cklist" value="<?php echo $black_phone['id'] ?>"></td>
             <td><?php echo $black_phone['phone'] ?></td>
             <td><?php echo $black_phone['remark'] ?></td>
-            <td><?php $this->check_u_menu(array('code' => '<a onclick="return dialog_frame(this,230,150,1)" href="' . $this->createUrl('blackList/changePhone?id=' . $black_phone['id']) . '" />' . '修改</a>', 'auth_tag' => 'blacklist_changephone')); ?>
-                <?php $this->check_u_menu(array('code' => '<a onclick="confirm(\'确认删除吗！\')?location.href=\'' . $this->createUrl('blackList/deletePhone?id=' . $black_phone['id']) . '\':\'\'"/>' . '删除</a>', 'auth_tag' => 'blacklist_deletephone')); ?>
+            <td><?php if ($edit) { ?>
+                    <a onclick="return dialog_frame(this,230,150,1)" href="<?php echo $this->createUrl('blackList/changePhone?id=' . $black_phone['id']); ?>" />修改</a>&nbsp;&nbsp;
+                <?php }; ?>
+                <?php if ($del) { ?>
+                    <a onclick="confirm('确认删除吗！')?location.href='<?php echo $this->createUrl('blackList/deletePhone?id='.$black_phone['id']); ?>':'';">删除</a>
+                <?php }; ?>
             </td>
         </tr>
     <?php } ?>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Administrator
+ * ip黑名单
+ * User: hlc
  * Date: 2017/11/2
  * Time: 11:10
  */

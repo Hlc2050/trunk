@@ -135,13 +135,13 @@
                 <th>-</th>
             </tr>
             </thead>
-            <?php $del = $this->check_u_menu(array('auth_tag' => 'deliveryNormOrder_del'));
+            <?php $check_del = $this->check_u_menu(array('auth_tag' => 'deliveryNormOrder_del'));
                    $edit = $this->check_u_menu(array('auth_tag' => 'deliveryNormOrder_edit'));
             ?>
             <?php foreach ($page['listdata']['list'] as $key => $val) { ?>
                 <tr>
                     <td>
-                        <?php if ($del) { ?>
+                        <?php if ($check_del) { ?>
                         <input type="checkbox" class="cklist" value="<?php echo $val['id'] ; ?>"/>
                         <?php }; ?>
                     </td>

@@ -51,9 +51,11 @@ class OnlineMaterialController extends AdminController
 		left join material_article_template as m on m.id=a.origin_template_id
 		left join partner as p on p.id=a.partner_id
 		left join channel as c on c.id=a.channel_id
+		left join linkage as l on l.linkage_id=a.cat_id
+		left join cservice as n on n.csno=a.promotion_staff_id
 		";
         $params['pagebar'] = 1;
-        $params['select'] = "a.id,a.promotion_id,a.promotion_staff_id,a.is_main_page,a.article_title,a.article_type,a.update_time,a.promotion_staff_id,a.cat_id,m.article_code,c.channel_name,c.channel_code,b.promotion_type,p.name as partner_name,b.status,b.line_type";
+        $params['select'] = "a.id,a.promotion_id,a.promotion_staff_id,a.is_main_page,a.article_title,a.article_type,a.update_time,a.promotion_staff_id,a.cat_id,m.article_code,c.channel_name,c.channel_code,b.promotion_type,p.name as partner_name,b.status,b.line_type,l.linkage_name,n.csname_true";
 
         $params['smart_order'] = 1;
         $page['listdata'] = Dtable::model(OnlineMaterialManage::model()->tableName())->listdata($params);

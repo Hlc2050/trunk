@@ -43,8 +43,8 @@ class BlackListController extends AdminController
             $blackIPList = BlackListIp::model()->getIpBlackList();
 
             foreach ($_POST['ipblacklist'] as $k => $ip) {
-                //判断ip是否符合正则
-                if (!$this->verify_ip($ip)) continue;
+                //判断该元素是否为空
+                if ($ip == '') continue;
                 //数据库查找是否存在重复数据
                 if (in_array($ip, $blackIPList)) continue;
                 //判断数组是否存在该ip
@@ -82,8 +82,8 @@ class BlackListController extends AdminController
             $blackPhoneList = BlackListPhone::model()->getPhoneBlackList();
 
             foreach ($_POST['phoneblacklist'] as $k => $ph) {
-                //判断手机号是否符合正则
-                if (!$this->verify_phone($ph)) continue;
+                //判断该元素是否为空
+                if ($ph == '') continue;
                 //数据库查找是否存在重复数据
                 if (in_array($ph, $blackPhoneList)) continue;
                 //判断数组是否存在该手机号
@@ -94,7 +94,6 @@ class BlackListController extends AdminController
             }
 
             foreach ($arr as $v) {
-                //循环添加数据
                 $info = new BlackListPhone();
                 $info->phone = $v['phone'];
                 $info->remark = $v['remark'];
@@ -127,9 +126,13 @@ class BlackListController extends AdminController
             $info->remark = $remark;
             $ret = $info->save();
 
-            $this->logs("修改ip:" . $ip . "成功");
-            $msgarr = array('state' => 1, 'jscode' => "<script>setTimeout(function(){artDialog.close();}, 500)</script>");
-            $ret === false ? $this->msg(array('state' => 0, 'msgword' => '修改ip失败')) : $this->msg($msgarr);
+            if ($ret == false) {
+                $this->logs("修改ip:" . $ip . "失败");
+                $this->msg(array('state' => 0));
+            } else {
+                $this->logs("修改ip:" . $ip . "成功");
+                $this->msg(array('state' => 1, 'jscode' => "<script>setTimeout(function(){artDialog.close();}, 500)</script>"));
+            }
         }
     }
 
@@ -153,9 +156,13 @@ class BlackListController extends AdminController
             $info->remark = $remark;
             $ret = $info->save();
 
-            $this->logs("修改手机号:" . $ph . "成功");
-            $msgarr = array('state' => 1, 'jscode' => "<script>setTimeout(function(){artDialog.close();}, 500)</script>");
-            $ret === false ? $this->msg(array('state' => 0, 'msgwords' => '修改手机号失败')) : $this->msg($msgarr);
+            if ($ret == false) {
+                $this->logs("修改手机号:" . $ph . "失败");
+                $this->msg(array('state' => 0));
+            } else {
+                $this->logs("修改手机号:" . $ph . "成功");
+                $this->msg(array('state' => 1, 'jscode' => "<script>setTimeout(function(){artDialog.close();}, 500)</script>"));
+            }
         }
     }
 
@@ -167,10 +174,15 @@ class BlackListController extends AdminController
     {
         $ids = $this->get('id');
 
-        BlackListIp::model()->deleteAll('id in ('.$ids.')');
+        $ret = BlackListIp::model()->deleteAll('id in (' . $ids . ')');
 
-        $this->logs("批量删除ip成功");
-        $this->msg(array('state' => 1, 'msgwords' => '批量删除ip成功','url'=>$this->createUrl('blackList/index?group_id=0')));
+        if ($ret == false) {
+            $this->logs("批量删除ip失败");
+            $this->msg(array('state' => 0));
+        } else {
+            $this->logs("批量删除ip成功");
+            $this->msg(array('state' => 1, 'msgwords' => '批量删除ip成功', 'url' => $this->createUrl('blackList/index?group_id=0')));
+        }
     }
 
     /**
@@ -181,10 +193,15 @@ class BlackListController extends AdminController
     {
         $ids = $this->get('id');
 
-        BlackListPhone::model()->deleteAll('id in ('.$ids.')');
+        $ret = BlackListPhone::model()->deleteAll('id in (' . $ids . ')');
 
-        $this->logs("批量删除手机号成功");
-        $this->msg(array('state' => 1, 'msgwords' => '批量删除手机号成功','url'=>$this->createUrl('blackList/index?group_id=1')));
+        if ($ret == false) {
+            $this->logs("批量删除手机号失败");
+            $this->msg(array('state' => 0));
+        } else {
+            $this->logs("批量删除手机号成功");
+            $this->msg(array('state' => 1, 'msgwords' => '批量删除手机号成功', 'url' => $this->createUrl('blackList/index?group_id=1')));
+        }
     }
 
     /**
@@ -195,13 +212,19 @@ class BlackListController extends AdminController
     {
         $id = $this->get('id');
 
-        $ret = BlackListIp::mode()->findByPk($id);
-        if (!$ret)  $this->msg(array('state' => 0, 'msgwords' => '该ip已删除'));
-        $this->logs('删除ip：' . $ret['ip_adress'] . '成功');
+        $data = BlackListIp::model()->findByPk($id);
+        if (!$data) $this->msg(array('state' => 0, 'msgwords' => '该ip已删除'));
+        $this->logs('删除ip：' . $data['ip_adress'] . '成功');
 
-        $ret->delete();
+        $ret = $data->delete();
 
-        $this->msg(array('state' => 1, 'msgwords' => '删除ip成功','url'=>$this->createUrl('blackList/index')));
+        if ($ret == false) {
+            $this->logs('删除ip：' . $data['ip_adress'] . '失败');
+            $this->msg(array('state' => 0));
+        } else {
+            $this->logs('删除ip：' . $data['ip_adress'] . '成功');
+            $this->msg(array('state' => 1, 'msgwords' => '删除ip：' . $data['ip_adress'] . '成功', 'url' => $this->createUrl('blackList/index')));
+        }
     }
 
     /**
@@ -211,13 +234,19 @@ class BlackListController extends AdminController
     public function actionDeletePhone()
     {
         $id = $this->get('id');
-        $ret = BlackListPhone::model()->findByPk($id);
-        if (!$ret)  $this->msg(array('state' => 0, 'msgwords' => '该手机号已删除'));
-        $this->logs('删除手机号：' . $ret['phone'] . '成功');
+        $data = BlackListPhone::model()->findByPk($id);
+        if (!$data) $this->msg(array('state' => 0, 'msgwords' => '该手机号已删除'));
+        $this->logs('删除手机号：' . $data['phone'] . '成功');
 
-        $ret->delete();
+        $ret = $data->delete();
 
-        $this->msg(array('state' => 1, 'msgwords' => '删除手机号成功','url'=>$this->createUrl('blackList/index?group_id=1')));
+        if ($ret == false) {
+            $this->logs('删除手机号：' . $data['phone'] . '失败');
+            $this->msg(array('state' => 0));
+        } else {
+            $this->logs('删除手机号：' . $data['phone'] . '成功');
+            $this->msg(array('state' => 1, 'msgwords' => '删除手机号：' . $data['phone'] . '成功', 'url' => $this->createUrl('blackList/index?group_id=1')));
+        }
     }
 
     /**
@@ -244,6 +273,8 @@ class BlackListController extends AdminController
                 $highestRow = $sheet->getHighestRow();
                 //取得总列数
                 $highestColumn = $sheet->getHighestColumn();
+                //获取ip列表
+                $blackIPList = BlackListIp::model()->getIpBlackList();
                 //从第二行开始读取数据
                 for ($j = 2; $j <= $highestRow; $j++) {
                     $str = "";
@@ -256,20 +287,10 @@ class BlackListController extends AdminController
                     $strs = explode("|*|", $str);
                     $ip = $strs[0];
                     //判断是否符合ip正则
-                    if ($this->verify_ip($ip)) {
-                        //取得与数据库相同的ip
-                        $ret = BlackListIp::model()->find('ip_adress="' . $strs[0] . '"');
-                        //数据库查找不到相同的ip时
-                        if ($ret['ip_adress'] == null) {
-                            Yii::app()->db->createCommand()->insert('black_list_ip', array('ip_adress' => $strs[0], 'remark' => $strs[1]));
-                        } else {
-                            //重复时跳过
-                            continue;
-                        }
-                    } else {
-                        //不符合ip正则时跳过
-                        continue;
-                    }
+                    if (!$this->verify_ip($ip)) continue;
+                    //数据库是否存在相同的ip
+                    if(in_array($strs[0],$blackIPList)) continue;
+                    Yii::app()->db->createCommand()->insert('black_list_ip', array('ip_adress' => $strs[0], 'remark' => $strs[1]));
                 }
             } else {
                 //文件类型不符合是输出
@@ -304,6 +325,8 @@ class BlackListController extends AdminController
                 $highestRow = $sheet->getHighestRow();
                 //取得总列数
                 $highestColumn = $sheet->getHighestColumn();
+                //获取手机号列表
+                $blackPhoneList = BlackListPhone::model()->getPhoneBlackList();
                 //从第二行开始读取数据
                 for ($j = 2; $j <= $highestRow; $j++) {
                     $str = "";
@@ -312,29 +335,18 @@ class BlackListController extends AdminController
                         //读取单元格
                         $str .= $objPHPExcel->getActiveSheet()->getCell("$k$j")->getValue() . '|*|';
                     }
-                    //字符串分割，获取数据
                     $strs = explode("|*|", $str);
-                    //取得与数据库相同的id
                     $ph = $strs[0];
-                    //手机号不相等的情况进行下一步
-                    //判断是否符合ip正则
-                    if ($this->verify_phone($ph)) {
-                        $ret = BlackListPhone::model()->find('phone="' . $strs[0] . '"');
-                        if ($ret['phone'] == null) {
-                            Yii::app()->db->createCommand()->insert('black_list_phone', array('phone' => $strs[0], 'remark' => $strs[1]));
-                        } else {
-                            //重复时跳过
-                            continue;
-                        }
-                    } else {
-                        //不符合时跳过
-                        continue;
-                    }
+                    //判断是否符合手机号正则
+                    if (!$this->verify_phone($ph)) continue;
+                    //数据库是否存在该手机号
+                    if(in_array($strs[0],$blackPhoneList)) continue;
+                    Yii::app()->db->createCommand()->insert('black_list_phone', array('phone' => $strs[0], 'remark' => $strs[1]));
                 }
             } else {
-                //文件类型不符合是输出
                 $this->msg(array('state' => 0, 'msgwords' => '请选择要导入的xls文件！'));
             }
+
             $this->logs("导入手机号黑名单成功");
             $this->msg(array('state' => 1, 'msgwords' => '导入手机号黑名单成功'));
         }

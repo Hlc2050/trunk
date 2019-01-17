@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * 联动表
+ */
 class Linkage extends CActiveRecord
 {
     public function tableName()
